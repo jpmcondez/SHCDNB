@@ -152,6 +152,9 @@ input[type=checkbox]{width:auto;accent-color:var(--ox);transform:scale(1.15);mar
 .switch input{width:auto;accent-color:var(--ox)}
 h2 .switch{order:3;margin-left:.3rem}
 .lettersOff{font-size:13px;color:var(--muted);font-style:italic}
+.mappreset{display:flex;align-items:center;gap:.4rem;font-size:12.5px;padding:.25rem .55rem;line-height:1.3}
+.mappreset input{width:auto;accent-color:var(--ox)}
+.ml .auto{font-size:10px;color:var(--good);font-variant:small-caps;letter-spacing:.05em;padding:0 .2rem}
 .rr{font-size:11px;padding:.05rem .4rem;margin-top:.15rem}
 /* ---- scoring ---- */
 .sb.bonus .v{color:var(--good)}
@@ -829,6 +832,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  <ol>
   <li><b>Start a case.</b> Click <b>+ New case</b> and fill in the header. Put the case number (1–10) in <b>No.</b> so the tracker on the Scoreboard can find it, and the case date so newspaper dates can be checked.</li>
   <li><b>Log every lead you read.</b> One row per lead, with its booklet address (e.g. <span class="kbd">42 NW</span>). The lead counter at the top of page I counts them for you.</li>
+  <li><b>Follow it on the map.</b> On the <b>Map of London</b> tab, click <b>＋ London map</b> (or upload your own scan of the map). Every lead with an address like <span class="kbd">42 NW</span> pins itself in the right block, and your route is drawn in order. Click ⌖ next to any address in the lead log to jump to it. Anything without a number (a name, a park) you pin once by hand.</li>
   <li><b>Don't count free things.</b> The directory, the newspapers and going back to a lead you already read cost nothing. If you note them, use type <b>N</b> or <b>D</b>, or set Cost to <b>Re-read</b>; those rows are never counted.</li>
   <li><b>Informants are leads.</b> Tick them under <b>Informants used</b> and log the visit in the lead log as well.</li>
   <li><b>Build your case</b> on pages II and III: suspects, statements, clues, newspaper notes, timeline and theories. The warnings box flags contradictions, newspapers dated after the case, and addresses you logged twice.</li>
@@ -847,6 +851,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <li>Numbers inside each area are housing blocks, and they are the addresses. Short form in booklets and the directory: Hyde Park is <span class="kbd">95 NW</span>. Long form in newspapers: "95 Park Lane NW".</li>
   <li>A number covers a whole block, so a character can share an address with a hotel without living there (e.g. the Hotel Dacre at <span class="kbd">62 EC</span>).</li>
   <li><b style="color:#a02a20">Red</b> places are fixed landmarks (e.g. the British Museum); <b>black</b> places are police stations. Everything else can change owner from case to case.</li>
+  <li>Your map may be the French printing ("Londres"), which labels the areas <span class="kbd">NO</span> <span class="kbd">CO</span> <span class="kbd">SO</span> <span class="kbd">CE</span> <span class="kbd">SE</span>. They are the same areas: NO = NW, CO = WC, SO = SW, CE = EC. The notebook accepts either spelling.</li>
   <li>The <b>travel-time scale</b> in a corner lets you check suspects' movements and alibis. Suspects travel at one fixed speed whatever transport they use. Your own travel time never matters.</li>
  </ul>
  <h3>London Directory</h3>
@@ -938,7 +943,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  <table class="legend">
   <tr><td><b>1 lead</b></td><td>Reading one new paragraph from the booklet, including an informant's. One per turn, then pass left.</td></tr>
   <tr><td><b>Free</b></td><td>Directory · newspapers · re-reading visited leads (and re-reading with a new letter, in cases that use letters) · an address with no paragraph · leads on the Solution's free list</td></tr>
-  <tr><td><b>Areas</b></td><td>NW · WC · SW · EC · SE</td></tr>
+  <tr><td><b>Areas</b></td><td>NW · WC · SW · EC · SE (French map: NO · CO · SO · CE · SE)</td></tr>
   <tr><td><b>Newspapers</b></td><td>The case's day and all earlier ones, never later</td></tr>
   <tr><td><b>Holmes</b></td><td>42 NW for advice · always scores 100</td></tr>
   <tr><td><b>Score</b></td><td>Question points − 5 per lead over Holmes, + 5 per lead under</td></tr>
@@ -959,10 +964,12 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <div class="mapside">
    <div class="maphead">
     <select id="mapSel" aria-label="Choose map"></select>
+    <button id="mapBuiltinBtn" class="hidden" title="Add the London map that comes with this notebook">＋ London map</button>
     <button id="mapUploadBtn" title="Upload a map image">⇧ Upload</button>
     <input type="file" id="mapFile" accept="image/*" class="hidden">
    </div>
    <div class="mapmanage" id="mapManage"><input id="mapName" aria-label="Map name"><button id="mapDel">Delete</button></div>
+   <label class="mappreset hidden" id="mapPresetRow" title="Uses the built-in positions of all 476 numbered addresses on the official London map"><input type="checkbox" id="mapPreset"> Auto-pin addresses (official London map)</label>
    <div class="mtabs"><button data-mlist="mine" class="on">My leads</button><button data-mlist="holmes">Holmes's leads</button></div>
    <div id="mapList"></div>
    <div class="maptoggles">
@@ -974,7 +981,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
    <div class="layer" id="mapLayer"><img id="mapImg" alt="Map"><svg id="mapSvg" aria-hidden="true"></svg><div id="mapPins"></div></div>
    <div class="mapctl"><button data-mz="1" aria-label="Zoom in">+</button><button data-mz="-1" aria-label="Zoom out">−</button><button data-mz="fit" class="fit">Fit</button></div>
    <div class="maphint" id="mapHint"></div>
-   <div class="mapempty" id="mapEmpty"><div class="big">No map yet</div><p id="mapEmptyMsg">Upload a picture of your map (a photo or scan, PNG or JPG). You can keep several, for example one per box, and choose one per case.</p><button id="mapUploadBig">⇧ Upload a map</button></div>
+   <div class="mapempty" id="mapEmpty"><div class="big">No map yet</div><p id="mapEmptyMsg">Upload a picture of your map (a photo or scan, PNG or JPG). You can keep several, for example one per box, and choose one per case.</p><button id="mapBuiltinBig" class="hidden">＋ Use the London map</button> <button id="mapUploadBig">⇧ Upload a map</button></div>
   </div>
  </div>
 </div>
@@ -1118,7 +1125,7 @@ function checkLocked(){
   el.className='lstat wait';el.textContent='Waiting for '+L});
 }
 /* ---------- leads & scoring (per the rulebook) ---------- */
-function normAddr(s){const m=String(s||'').toUpperCase().match(/(\d+)\s*([A-Z]{1,2})\b/);return m?m[1]+' '+m[2]:String(s||'').trim().toUpperCase()}
+function normAddr(s){const pa=parseAddr(s);if(pa)return pa.num+' '+pa.area;const m=String(s||'').toUpperCase().match(/(\d+)\s*([A-Z]{1,2})\b/);return m?m[1]+' '+m[2]:String(s||'').trim().toUpperCase()}
 const areaOf=s=>{const m=String(s||'').toUpperCase().match(/\d+\s*([A-Z]{1,2})\b/);return m?m[1]:''};
 const leadFilled=r=>filled(r,['type','who','addr','why','learned']);
 // why[i]: '' = empty row, 'count' = costs a lead, 'free' | 'reread' | 'note' = doesn't count
@@ -1514,7 +1521,18 @@ document.addEventListener('keydown',e=>{
 
 /* ---------- maps: your own uploaded images ---------- */
 const norm=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-function pinKey(r){if(!r)return null;const a=norm(r.addr);if(a)return 'A:'+a;const w=norm(r.who);return w?'W:'+w:null}
+// ---- official London map ("Londres au temps de Sherlock Holmes", 2000×1572): centre of every numbered address disc ----
+const PRESET_ID='londres',PRESET_W=2000,PRESET_H=1572,BUILTIN_FILE='london-map.jpg';
+const PRESET_RAW='NW:1.532.126,2.420.226,3.540.242,4.486.268,5.548.310,6.476.382,7.496.448,8.583.411,9.608.448,10.575.446,11.560.564,12.624.549,13.717.547,14.623.602,15.694.624,16.745.608,17.729.654,18.702.687,19.709.737,20.654.748,21.625.698,22.634.774,23.552.783,24.522.758,25.515.684,26.445.864,27.340.933,28.372.820,29.343.712,30.386.688,31.430.647,32.234.704,33.210.630,34.396.567,35.460.539,36.424.503,37.410.465,38.308.508,39.269.528,40.290.419,41.256.434,42.168.502,43.113.468,44.139.415,45.206.391,46.204.334,47.82.367,48.60.421,49.80.530,50.125.517,51.124.608,52.157.601,53.207.477,54.165.639,55.181.704,56.205.760,57.247.746,58.262.780,59.283.856,60.305.895,61.333.875,62.364.912,63.430.900,64.424.846,65.474.847,66.485.827,67.520.832,68.488.790,69.454.776,70.268.682,71.284.656,72.258.608,73.299.596,74.308.622,75.323.651,76.330.678,77.329.598,78.386.656,79.418.594,80.464.582,81.484.624,82.537.608,83.503.570,84.531.565,85.494.536,86.481.498,87.521.527,88.513.491,89.544.481,90.594.722,91.574.683,92.370.482,93.359.443,94.398.431,95.104.877,96.72.763,97.198.73,98.228.203,99.372.76;WC:1.986.70,2.1000.97,3.1084.124,4.971.163,5.1037.197,6.1131.232,7.1044.298,8.951.335,9.969.376,10.1103.399,11.971.467,12.1068.463,13.1102.491,14.1186.550,15.1102.612,16.1095.691,17.1041.711,18.973.684,19.920.747,20.908.807,21.888.845,22.866.829,23.867.766,24.786.779,25.779.758,26.810.710,27.870.742,28.896.707,29.840.674,30.898.674,31.979.640,32.997.609,33.983.586,34.958.524,35.872.572,36.806.556,37.863.493,38.815.424,39.860.420,40.890.406,41.736.367,42.670.388,43.678.256,44.805.303,45.818.272,46.805.236,47.818.142,48.776.54,49.838.80,50.735.63,51.701.78,52.629.81,53.590.154,54.626.202,55.680.169,56.735.136,57.774.182,58.715.223,59.782.322,60.605.270,61.636.344,62.666.329,63.705.417,64.767.493,65.828.509,66.786.598,67.797.649,68.872.645,69.900.602,70.944.635,71.1048.642,72.1075.583,73.919.547,74.936.486,75.906.462,76.933.408,77.978.404,78.1055.422,79.1075.351,80.855.297,81.850.256,82.845.186,83.892.155,84.1016.136,85.1076.195,86.1099.278,87.1163.193,88.1106.54,89.1050.52,90.836.778,91.928.781,92.971.774,93.966.747,94.936.705,95.996.744,96.1018.678;SW:1.572.862,2.688.791,3.723.779,4.739.802,5.670.833,6.585.952,7.641.929,8.678.901,9.682.929,10.804.906,11.861.906,12.824.961,13.882.968,14.817.1006,15.804.1079,16.877.1106,17.821.1132,18.688.1161,19.710.1205,20.733.1229,21.814.1238,22.746.1328,23.811.1404,24.656.1413,25.638.1524,26.531.1512,27.486.1514,28.558.1444,29.458.1456,30.496.1388,31.541.1342,32.638.1222,33.606.1110,34.531.1186,35.495.1063,36.448.1141,37.462.1269,38.406.1207,39.369.1247,40.321.1202,41.279.1242,42.326.1290,43.279.1404,44.240.1362,45.218.1514,46.190.1482,47.160.1420,48.106.1473,49.129.1388,50.80.1379,51.151.1344,52.187.1332,53.168.1191,54.224.1158,55.326.1130,56.299.1110,57.248.1078,58.170.1084,59.96.1048,60.58.1092,61.106.1129,62.55.1149,63.39.1192,64.63.1336,65.91.1322,66.254.1290,67.299.1332,68.354.1376,69.379.1317,70.554.1294,71.590.1300,72.604.1395,73.635.1437,74.673.1469,75.738.1531,76.749.1472,77.707.1370,78.804.1325,79.833.1292,80.863.1257,81.754.1186,82.663.1150,83.733.1091,84.812.1046,85.858.881,86.712.831,87.614.851,88.592.917,89.532.891,90.686.860,96.398.1078,97.433.997,98.729.957,100.236.1233;EC:1.1714.51,2.1824.92,3.1853.163,4.1852.196,5.1704.220,6.1809.308,7.1752.372,8.1938.391,9.1830.412,10.1706.397,11.1760.496,12.1961.565,13.1942.709,14.1947.787,15.1802.784,16.1838.693,17.1831.618,18.1786.602,19.1750.684,20.1673.761,21.1690.721,22.1709.585,23.1662.585,24.1589.529,25.1608.657,26.1586.743,27.1510.620,28.1469.620,29.1410.656,30.1364.650,31.1294.674,32.1304.639,33.1187.642,34.1297.580,35.1290.538,36.1381.575,37.1376.535,38.1410.507,39.1459.489,40.1549.417,41.1581.435,42.1588.343,43.1414.417,44.1355.446,45.1411.336,46.1237.458,47.1177.321,48.1210.233,49.1361.273,50.1451.156,51.1425.133,52.1334.44,53.1244.40,54.1316.86,55.1275.116,56.1288.167,57.1262.187,58.1252.229,59.1316.237,60.1226.362,61.1198.459,62.1198.494,63.1252.578,64.1259.634,65.1347.592,66.1376.712,67.1488.720,68.1549.687,69.1556.631,70.1498.404,71.1491.367,72.1458.249,73.1513.222,74.1568.203,75.1706.172,76.1714.86,77.1784.90,78.1816.203,79.1890.239,80.1799.259,81.1724.305,82.1760.305,83.1820.560,84.1678.520,85.1676.561,86.1653.663,87.1658.712,88.1807.750,89.1806.700,90.1321.497,91.1361.494,92.1459.552,93.1459.528,94.1942.670,95.1920.472,96.1938.439,97.1885.414;SE:1.1520.822,2.1553.889,3.1619.863,4.1730.922,5.1594.945,6.1533.973,7.1612.1012,8.1518.1064,9.1467.1078,10.1355.1143,11.1508.1162,12.1625.1236,13.1491.1307,14.1382.1326,15.1425.1348,16.1335.1482,17.1278.1461,18.1171.1481,19.1079.1475,20.1042.1478,21.1022.1409,22.1081.1358,23.1130.1396,24.1149.1309,25.1214.1275,26.1318.1286,27.1331.1247,28.1250.1213,29.995.1183,30.1152.1094,31.1194.1117,32.1180.1061,33.1214.1075,34.1302.1090,35.1353.987,36.1226.979,37.1136.962,38.1296.828,39.1268.803,40.1218.815,41.1297.877,42.1304.942,43.1201.907,44.1168.928,45.1261.1010,46.1238.1108,47.1168.1029,48.1090.1010,49.1056.989,50.1044.1107,51.1190.1172,52.1145.1196,53.1170.1235,54.1120.1258,55.1171.1272,56.1125.1328,57.1052.1424,58.1092.1440,59.1133.1494,60.1232.1476,61.1374.1482,62.1323.1420,63.1217.1433,64.1222.1396,65.1216.1368,66.1222.1319,67.1369.1279,68.1371.1218,69.1322.1182,70.1348.1098,71.1361.1031,72.1386.1084,73.1404.1143,74.1452.1140,75.1417.1217,76.1453.1223,77.1442.1272,78.1510.1212,79.1584.1162,80.1530.1036,81.1489.1033,82.1439.1027,83.1470.984,84.1421.988,85.1345.940,86.1424.920,87.1449.876,88.1502.870,89.1455.834,90.1040.1227';
+const PRESET_PTS={},PRESET_NUMS={};
+PRESET_RAW.split(';').forEach(part=>{const [a,list]=part.split(':');PRESET_NUMS[a]=new Set();list.split(',').forEach(t=>{const [n,x,y]=t.split('.').map(Number);PRESET_NUMS[a].add(n);PRESET_PTS['A:'+n+a]={x:+(x/PRESET_W).toFixed(5),y:+(y/PRESET_H).toFixed(5)}})});
+// English and French area names (the French map prints NO, CO, SO, CE, SE)
+const AREA_ALIAS={NW:'NW',WC:'WC',SW:'SW',EC:'EC',SE:'SE',NO:'NW',CO:'WC',SO:'SW',CE:'EC'};
+function parseAddr(s){const t=String(s||'').toUpperCase();let m=t.match(/(\d{1,3})\s*[A-Z .,'’-]*?\b(NW|WC|SW|EC|SE|NO|CO|SO|CE)\b/)||t.match(/\b(NW|WC|SW|EC|SE|NO|CO|SO|CE)\s*(\d{1,3})\b/);
+ if(!m)return null;const num=/^\d/.test(m[1])?+m[1]:+m[2],ar=AREA_ALIAS[/^\d/.test(m[1])?m[2]:m[1]];return {num,area:ar,key:num+ar}}
+const pinsOf=m=>{const user=(m&&store.shared.pins[m.id])||{};return m&&m.preset===PRESET_ID?Object.assign({},PRESET_PTS,user):user};
+const looksLikePreset=(w,h)=>Math.abs(w/h-PRESET_W/PRESET_H)<.015;
+function pinKey(r){if(!r)return null;const pa=parseAddr(r.addr);const a=pa?pa.key:norm(r.addr);if(a)return 'A:'+a;const w=norm(r.who);return w?'W:'+w:null}
 function mapDB(){return new Promise((res,rej)=>{const r=indexedDB.open('scd-maps',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function imgGet(id){try{const d=await mapDB();return await new Promise(r=>{const q=d.transaction('img').objectStore('img').get(id);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)})}catch(e){return null}}
 async function imgPut(id,blob){const d=await mapDB();await new Promise((r,j)=>{const t=d.transaction('img','readwrite');t.objectStore('img').put(blob,id);t.oncomplete=r;t.onerror=()=>j(t.error)})}
@@ -1534,6 +1552,7 @@ async function openMap(){
  if(mv.id===m.id&&mv.loaded){emptyState('');requestAnimationFrame(()=>{clampView();drawOverlay()});return}
  mv.loaded=false;mv.id=m.id;emptyState('Loading the map…');
  let blob=await imgGet(m.id);
+ if(!blob&&m.builtin){try{const r=await fetch(BUILTIN_FILE);if(r.ok){blob=await r.blob();await imgPut(m.id,blob)}}catch(e){}}
  if(!blob&&m.dbx&&dbxOn()){try{emptyState('Downloading this map from Dropbox…');blob=await dbxDownloadBlob(mapPath(m));await imgPut(m.id,blob)}catch(e){blob=null}}
  if(mv.id!==m.id)return;
  if(!blob){emptyState('The picture for <b>'+esc(m.name)+'</b> isn\'t on this device yet.'+(m.dbx?' Connect Dropbox (Menu → Save point) to download it.':' Upload it again here, or connect Dropbox on the device that has it so it can be shared.'));return}
@@ -1583,7 +1602,7 @@ function entries(kind){
  return out;
 }
 function drawOverlay(){
- if(!mv.loaded||!store)return;const m=curMap();if(!m)return;const pins=store.shared.pins[m.id]||{};
+ if(!mv.loaded||!store)return;const m=curMap();if(!m)return;const pins=pinsOf(m);
  const mine=entries('mine'),hol=entries('holmes'),showM=$('#showMine').checked,showH=$('#showHol').checked;
  const groups={};
  if(showM)mine.forEach(e=>{const g=groups[e.key]=groups[e.key]||{m:[],h:[],e};g.m.push(e.n)});
@@ -1600,17 +1619,18 @@ function renderMapSide(){
  const ms=store.shared.maps,m=curMap();
  $('#mapSel').innerHTML=ms.length?ms.map(x=>'<option value="'+x.id+'"'+(m&&x.id===m.id?' selected':'')+'>'+esc(x.name)+'</option>').join(''):'<option value="">No maps yet</option>';
  $('#mapManage').classList.toggle('hidden',!m);if(m)$('#mapName').value=m.name;
+ $('#mapPresetRow').classList.toggle('hidden',!m);if(m)$('#mapPreset').checked=m.preset===PRESET_ID;
  $$('[data-mlist]').forEach(b=>b.classList.toggle('on',b.dataset.mlist===mv.list));
  renderMapList();
 }
 function renderMapList(flashKey){
- if(!store)return;const m=curMap(),pins=m?(store.shared.pins[m.id]||{}):{};const kind=mv.list,list=entries(kind);
+ if(!store)return;const m=curMap(),pins=m?pinsOf(m):{},upins=m?(store.shared.pins[m.id]||{}):{};const kind=mv.list,list=entries(kind);
  let h='';
  if(kind==='holmes'){const cmp=compareRoutes();h+='<div class="mlsum">'+(list.length?'Both of you: <b>'+cmp.both.length+'</b> · Only Holmes: <b>'+cmp.onlyH.length+'</b> · Only you: <b>'+cmp.onlyMe.length+'</b>':'Add Holmes\'s leads in the Scoring section (page IV) once the solution is revealed.')+'</div>'}
- if(!list.length&&kind==='mine')h+='<div class="mlsum">Leads with an address or a name appear here. Pin each address once; it\'s remembered for every case on this map.</div>';
+ if(!list.length&&kind==='mine')h+='<div class="mlsum">Leads with an address or a name appear here. '+(m&&m.preset===PRESET_ID?'Addresses like <b>42 NW</b> are placed automatically on this map; anything else you pin once by hand.':'Pin each address once; it\'s remembered for every case on this map.')+'</div>';
  list.forEach(e=>{const pinned=!!pins[e.key],tgt=mv.target&&mv.target.key===e.key;
   h+='<div class="ml'+(kind==='holmes'?' h':'')+(pinned?' pinned':'')+(tgt?' tgt':'')+'" data-mkey="'+esc(e.key)+'"><span class="n">'+(kind==='holmes'?'H':'#')+e.n+'</span><span class="t">'+esc(e.label)+(e.who&&e.who!==e.label?' <small>'+esc(e.who)+'</small>':'')+'</span>'+
-  (m?'<button class="pinb" data-mpin="'+kind+':'+e.i+'">'+(pinned?'Move':'📍 Pin')+'</button>'+(pinned?'<button data-mfind="'+kind+':'+e.i+'" title="Show on map">⌖</button><button data-munpin="'+esc(e.key)+'" title="Remove pin">×</button>':''):'')+'</div>'});
+  (m?'<button class="pinb" data-mpin="'+kind+':'+e.i+'">'+(pinned?'Move':'📍 Pin')+'</button>'+(pinned?'<button data-mfind="'+kind+':'+e.i+'" title="Show on map">⌖</button>'+(upins[e.key]?'<button data-munpin="'+esc(e.key)+'" title="'+(PRESET_PTS[e.key]&&m.preset===PRESET_ID?'Back to the map\'s own position':'Remove pin')+'">×</button>':'<span class="auto" title="Placed automatically from the map">auto</span>'):''):'')+'</div>'});
  $('#mapList').innerHTML=h;
  if(flashKey){const el=$('#mapList [data-mkey="'+CSS.escape(flashKey)+'"]');if(el){el.scrollIntoView({block:'nearest'});el.classList.add('tgt');setTimeout(()=>el.classList.remove('tgt'),1500)}}
 }
@@ -1623,7 +1643,7 @@ async function mapLocate(kind,i,fromLog){
  mv.list=kind;
  if(!splitOn())showView('mapView');else await openMap();
  if(!mv.loaded){if(!mv.open)await openMap();if(!mv.loaded)return}
- const m=curMap(),p=(store.shared.pins[m.id]||{})[k];
+ const m=curMap(),p=pinsOf(m)[k];
  if(p){centerOn(p.x,p.y,3);drawOverlay();const el=$('#mapPins .mpin[data-key="'+CSS.escape(k)+'"]');if(el){el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),2600)}renderMapList(k)}
  else{renderMapSide();startPin(kind,i)}
 }
@@ -1635,10 +1655,23 @@ document.addEventListener('click',e=>{
  const fb=t.closest('[data-mfind]');if(fb){const [k,i]=fb.dataset.mfind.split(':');mapLocate(k,+i);return}
  const ub=t.closest('[data-munpin]');if(ub){const m=curMap();if(m&&store.shared.pins[m.id]){delete store.shared.pins[m.id][ub.dataset.munpin];touchShared();drawOverlay();renderMapList()}return}
 });
+$('#mapPreset').addEventListener('change',e=>{const m=curMap();if(!m)return;m.preset=e.target.checked?PRESET_ID:'';touchShared();drawOverlay();renderMapList();
+ banner(e.target.checked?'Addresses are now placed automatically on this map. You can still move any pin by hand.':'Automatic placement is off for this map. Pins you placed by hand are kept.')});
 $('#showMine').addEventListener('change',drawOverlay);$('#showHol').addEventListener('change',drawOverlay);
 $('#mapSel').addEventListener('change',e=>{if(!e.target.value)return;cur().f.mapId=e.target.value;save(true);mv.target=null;mapHint('');openMap()});
 $('#mapName').addEventListener('change',e=>{const m=curMap();if(!m)return;m.name=e.target.value.trim()||m.name;touchShared();renderMapSide()});
 const pickMap=()=>$('#mapFile').click();
+// built-in map: london-map.jpg next to this page (e.g. in the GitHub repo). Offered only if the file is there.
+let builtinOK=false;
+fetch(BUILTIN_FILE,{method:'HEAD',cache:'no-store'}).then(r=>{builtinOK=r.ok;$('#mapBuiltinBtn').classList.toggle('hidden',!r.ok);$('#mapBuiltinBig').classList.toggle('hidden',!r.ok)}).catch(()=>{});
+async function addBuiltin(){
+ const have=store.shared.maps.find(x=>x.builtin);if(have){cur().f.mapId=have.id;save(true);mv.id=null;await openMap();banner('Using the London map.');return}
+ let blob;try{const r=await fetch(BUILTIN_FILE);if(!r.ok)throw 0;blob=await r.blob()}catch(e){banner('Couldn\'t load '+BUILTIN_FILE+'. Upload the map instead.');return}
+ const id=rid();try{await imgPut(id,blob)}catch(e){banner('This browser couldn\'t store the map.');return}
+ store.shared.maps.push({id,name:'London (official map)',w:PRESET_W,h:PRESET_H,ext:'jpg',dbx:false,builtin:true,preset:PRESET_ID});
+ cur().f.mapId=id;save(true);touchShared();mv.id=null;await openMap();banner('London map added. Addresses like 42 NW are placed on it automatically.');
+}
+$('#mapBuiltinBtn').addEventListener('click',addBuiltin);$('#mapBuiltinBig').addEventListener('click',addBuiltin);
 $('#mapUploadBtn').addEventListener('click',pickMap);$('#mapUploadBig').addEventListener('click',pickMap);
 $('#mapFile').addEventListener('change',async e=>{
  const file=e.target.files[0];e.target.value='';if(!file)return;
@@ -1647,8 +1680,9 @@ $('#mapFile').addEventListener('change',async e=>{
  const id=rid(),ext=(file.name.split('.').pop()||'png').toLowerCase().replace(/[^a-z0-9]/g,'')||'png';
  try{await imgPut(id,file)}catch(err){URL.revokeObjectURL(u);banner('This browser couldn\'t store the image.');return}
  const meta={id,name:file.name.replace(/\.[^.]+$/,'')||'Map',w:im.naturalWidth,h:im.naturalHeight,ext,dbx:false};URL.revokeObjectURL(u);
+ if(looksLikePreset(meta.w,meta.h))meta.preset=PRESET_ID;
  store.shared.maps.push(meta);cur().f.mapId=id;save(true);touchShared();mv.id=null;await openMap();
- banner('Map added. '+(dbxOn()?'It will be copied to Dropbox so your other devices get it.':'Connect Dropbox to share it with your other devices.'));
+ banner('Map added. '+(meta.preset?'It looks like the official London map, so addresses such as 42 NW are placed automatically (switch off under the map name if not). ':'')+(dbxOn()?'It will be copied to Dropbox so your other devices get it.':'Connect Dropbox to share it with your other devices.'));
  if(dbxOn())scheduleSync();
 });
 let mdelArm=null;
@@ -1768,6 +1802,8 @@ function findIssues(c){
  if(L(c.f.who)){const p=sus[low(c.f.who)];if(p&&p.status==='Cleared')out.push({bad:true,msg:'Your sealed theory names '+esc(L(c.f.who))+', who is cleared.'})}
  c.t.clues.forEach(k=>{const p=sus[low(k.to)];if(p&&p.status==='Cleared'&&(+k.str||0)>=3)out.push({msg:'A strong clue points to <b>'+esc(L(k.to))+'</b>, who is cleared: "'+esc(L(k.clue).slice(0,60))+'".'})});
  if(lettersOn(c))c.t.locked.forEach(r=>{const Lt=needOf(r);if(Lt&&!r.done&&c.letters[Lt])out.push({msg:'You have circled <b>'+Lt+'</b>: re-read <b>'+esc(L(r.addr)||'the locked lead')+'</b> now. It doesn\'t cost a lead.'})});
+ if(store.shared.maps.some(m=>m.preset===PRESET_ID)){const bad=new Set();[...c.t.leads,...c.t.holmes].forEach(r=>{const pa=parseAddr(r&&r.addr);if(pa&&PRESET_NUMS[pa.area]&&!PRESET_NUMS[pa.area].has(pa.num))bad.add(pa.num+' '+pa.area)});
+  if(bad.size)out.push({msg:'Check '+(bad.size>1?'these addresses':'this address')+': <b>'+[...bad].map(esc).join(', ')+'</b> '+(bad.size>1?'aren\'t':'isn\'t')+' on the London map.'})}
  {const seenA={};c.t.leads.forEach((r,i)=>{if(!leadFilled(r)||r.cost||r.type==='N'||r.type==='D')return;const a=normAddr(r.addr);if(!a||!/\d/.test(a))return;if(seenA[a])out.push({msg:'<b>'+esc(a)+'</b> is logged twice (leads '+seenA[a]+' and '+(i+1)+'). Re-reading a lead you already visited is free: set the second one\'s Cost to Re-read or remove it.'});else seenA[a]=i+1})}
  paperStates(c).forEach((st,i)=>{if(st.k==='bad')out.push({bad:true,msg:'Newspaper "'+esc(L(c.t.papers[i].item)||L(c.t.papers[i].date))+'" is dated after the case date, so it can\'t be used.'})});
  return out;
@@ -1892,7 +1928,7 @@ async function dbxUploadBlob(path,blob){
 async function dbxDelete(path){try{await fetch('https://api.dropboxapi.com/2/files/delete_v2',{method:'POST',headers:{Authorization:'Bearer '+await token(),'Content-Type':'application/json'},body:JSON.stringify({path})})}catch(e){}}
 const mapPath=m=>'/maps/'+m.id+'.'+(m.ext||'png');
 async function pushMapImages(){
- let n=0;for(const m of store.shared.maps){if(m.dbx)continue;const b=await imgGet(m.id);if(!b)continue;await dbxUploadBlob(mapPath(m),b);m.dbx=true;n++}
+ let n=0;for(const m of store.shared.maps){if(m.dbx||m.builtin)continue;const b=await imgGet(m.id);if(!b)continue;await dbxUploadBlob(mapPath(m),b);m.dbx=true;n++}
  if(n){store.shared.updated=Date.now();saveNow(true)}
  return n;
 }
