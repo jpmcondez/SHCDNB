@@ -148,6 +148,10 @@ input[type=checkbox]{width:auto;accent-color:var(--ox);transform:scale(1.15);mar
 #t-leads tr[data-why=note] td.num::after{content:'note'}
 #t-leads tr[data-why=reread] td.num::after{content:'re-read'}
 .guide h2{scroll-margin-top:calc(var(--tbH) + 12px)}
+.switch{display:inline-flex;align-items:center;gap:.4rem;font-size:13px;font-variant:normal;letter-spacing:0;font-weight:normal;color:var(--ink);cursor:pointer}
+.switch input{width:auto;accent-color:var(--ox)}
+h2 .switch{order:3;margin-left:.3rem}
+.lettersOff{font-size:13px;color:var(--muted);font-style:italic}
 .rr{font-size:11px;padding:.05rem .4rem;margin-top:.15rem}
 /* ---- scoring ---- */
 .sb.bonus .v{color:var(--good)}
@@ -620,6 +624,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <label class="f">Players<input data-f="players"></label>
   <label class="f">Start time<input type="time" data-f="start"></label>
   <label class="f">Finish time<input type="time" data-f="finish"></label>
+  <label class="switch noprint" title="Turn on for cases where leads tell you to circle letters"><input type="checkbox" class="lettersChk"> This case uses letters</label>
  </div>
 
  <h2><span class="ic">✉</span>Opening brief</h2>
@@ -634,24 +639,27 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  </div>
 
  <h2><span class="ic">◉</span>Lead counter</h2>
- <p class="hint">Fills in automatically from the lead log. Only leads that cost you count; free leads and letter re-reads don't. Click a circle to mark Holmes's lead count once it's revealed.</p>
+ <p class="hint">Fills in automatically from the lead log. Only leads that cost you count; free leads and re-reads don't. Click a circle to mark Holmes's lead count once it's revealed.</p>
  <div class="counter" id="counter"></div>
  <div class="counter-sum" id="counterSum"></div>
 
  <h2><span class="ic">⌕</span>Lead log<button class="glink noprint" data-guide="g-turn">rules</button></h2>
- <p class="hint">One row per lead read aloud (one per turn). Address: the booklet section, e.g. <b>42 NW</b>. Type: V visit · I informant · C contact · N newspaper note · D directory note (N and D are free, so they never count). Cost: blank = 1 lead · <b>Free</b> = on Holmes's free-lead list · <b>Re-read</b> = re-read with a newly circled letter. Useful: Y yes · N no · R red herring.</p>
+ <p class="hint">One row per lead read aloud (one per turn). Address: the booklet section, e.g. <b>42 NW</b>. Type: V visit · I informant · C contact · N newspaper note · D directory note (N and D are free, so they never count). Cost: blank = 1 lead · <b>Free</b> = on the Solution's free-lead list · <b>Re-read</b> = going back to a lead you already followed, or re-reading with a newly circled letter (both free). Useful: Y yes · N no · R red herring.</p>
  <table id="t-leads"></table>
  <button class="add" data-add="leads">+ Add lead</button>
 
- <h2><span class="ic">Ⓛ</span>Circled letters<button class="glink noprint" data-guide="g-letters">rules</button></h2>
+ <h2><span class="ic">Ⓛ</span>Circled letters<label class="switch noprint"><input type="checkbox" class="lettersChk"> used in this case</label><button class="glink noprint" data-guide="g-letters">rules</button></h2>
+ <p class="lettersOff" id="lettersOff">Letters are off for this case. The Jack the Ripper rulebook doesn't use them; switch on only if a lead tells you to circle a letter.</p>
+ <div id="lettersBody">
  <p class="hint">When a lead says "circle the letter X", click it here. Each case has its own letters. Leads that asked for a letter you didn't have go in the table below; once you circle that letter you can re-read them for free (unless the text says otherwise).</p>
  <div class="letters" id="letters"></div>
  <div class="lsrc" id="lsrc"></div>
  <table id="t-locked"></table>
  <button class="add" data-add="locked">+ Add a lead that needs a letter</button>
+ </div>
 
  <h2><span class="ic">☏</span>Informants used</h2>
- <p class="hint">From the List of Informants. Tick the ones you visit. A visit is a normal lead, so log it in the lead log too. Stuck? Sherlock Holmes (42 NW) gives tips.</p>
+ <p class="hint">From the List of Informants (back of the directory). Tick the ones you visit. Each visit is a normal lead, so log it in the lead log too. Not every informant helps in every case, and some may be away.<button class="glink noprint" data-guide="g-informants">who does what</button></p>
  <ul class="checks" id="contacts"></ul>
  <div class="pagefoot">— I · The Investigation —</div>
 </section>
@@ -787,21 +795,15 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  </div>
  <h2><span class="ic">♛</span>Your record</h2>
  <div id="stats"></div>
- <h2><span class="ic">❖</span>The ten-case campaign<button class="glink noprint" data-guide="g-campaign">rules</button></h2>
- <p class="hint">Matched by case number (No. 1–10 in the case header). Cases 1–4 stand alone; 5–9 lead into case 10, which should be played last. Click a played case to open it.</p>
+ <h2><span class="ic">❖</span>The ten cases<button class="glink noprint" data-guide="g-setup">rules</button></h2>
+ <p class="hint">Matched by case number (No. 1–10 in the case header). The cases are dated; playing them in order keeps the newspapers from spoiling later cases. Click a played case to open it.</p>
  <div class="camprog" id="camprog"></div>
  <div class="counter-sum" id="campSum"></div>
  <h2><span class="ic">▤</span>All cases</h2>
- <p class="hint">Every saved case file, in the order you started them. Click a row to open it. Holmes always scores 100, so your score is also your percentage of Holmes.</p>
+ <p class="hint">Every saved case file, in the order you started them. Click a row to open it. Holmes always scores 100, so your score reads directly against his.</p>
  <div class="tscroll"><table class="camp" id="camp"></table></div>
- <h2><span class="ic">♛</span>How you measure up (from the rulebook)</h2>
- <table class="legend bands">
-  <tr><td>100 or more</td><td class="rank">Surpassed the Master</td><td>One of the very few to beat Holmes at his own game.</td></tr>
-  <tr><td>70 – 95</td><td class="rank">Excellent Investigator</td><td>Only Holmes himself could find fault with you.</td></tr>
-  <tr><td>35 – 65</td><td class="rank">Ready for More</td><td>You solved most of the case.</td></tr>
-  <tr><td>30 or less</td><td class="rank">Back to the Tips</td><td>Even good investigators fail. Review the tips and try again.</td></tr>
- </table>
- <p class="hint">If you've changed Holmes's score for another edition, the bands scale to it.</p>
+ <h2><span class="ic">♛</span>Against the Master<button class="glink noprint" data-guide="g-holmes">rules</button></h2>
+ <p class="hint">Holmes's score is always 100. The rulebook gives no ranks: you simply compare. Above 100 you have defeated the Master; at 100 you are level; below 100, Holmes wins by the difference.</p>
  <h2><span class="ic">✎</span>Notes</h2>
  <div class="grid">
   <label class="f">Favourite case<input data-g="fav"></label>
@@ -818,78 +820,98 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <div class="sup">221B Baker Street · London</div>
   <h1>Rules &amp; Guide</h1>
  </div>
- <p class="hint">A plain-language summary of the <i>Sherlock Holmes Consulting Detective</i> rulebook (Space Cowboys, ten-case box), plus a guide to this notebook. If anything here disagrees with your printed rulebook, the rulebook wins.</p>
+ <p class="hint">A plain-language summary of the <i>Sherlock Holmes Consulting Detective</i> rulebook (the ten-case Jack the Ripper &amp; West End Adventures box), plus a guide to this notebook. If anything here disagrees with your printed rulebook, the rulebook wins.</p>
  <nav class="gtoc noprint">
-  <a href="#g-quick">Using this notebook</a><a href="#g-object">The game</a><a href="#g-parts">What's in the box</a><a href="#g-setup">Setup</a><a href="#g-turn">Playing a turn</a><a href="#g-end">Ending a case</a><a href="#g-score">Scoring</a><a href="#g-bands">Ratings</a><a href="#g-campaign">Campaign</a><a href="#g-letters">Letters</a><a href="#g-tips">Tips</a><a href="#g-card">Quick card</a>
+  <a href="#g-quick">Using this notebook</a><a href="#g-object">The game</a><a href="#g-parts">What's in the box</a><a href="#g-informants">Informants</a><a href="#g-setup">Setup</a><a href="#g-turn">Playing a turn</a><a href="#g-end">Ending a case</a><a href="#g-score">Scoring</a><a href="#g-holmes">Against Holmes</a><a href="#g-letters">Letters (optional)</a><a href="#g-card">Quick card</a>
  </nav>
 
  <h2 id="g-quick"><span class="ic">✎</span>Using this notebook</h2>
  <ol>
-  <li><b>Start a case.</b> Click <b>+ New case</b> and fill in the header. Put the case number (1–10) in <b>No.</b> so the campaign tracker on the Scoreboard can find it.</li>
+  <li><b>Start a case.</b> Click <b>+ New case</b> and fill in the header. Put the case number (1–10) in <b>No.</b> so the tracker on the Scoreboard can find it, and the case date so newspaper dates can be checked.</li>
   <li><b>Log every lead you read.</b> One row per lead, with its booklet address (e.g. <span class="kbd">42 NW</span>). The lead counter at the top of page I counts them for you.</li>
-  <li><b>Don't log free things as leads.</b> Reading the newspaper or the directory, and re-reading a lead you already followed, cost nothing. If you want to note them, use type <b>N</b> or <b>D</b>, which are never counted.</li>
-  <li><b>Circle letters.</b> When a lead tells you to circle a letter, click it in <b>Circled letters</b>. If a lead asks for a letter you don't have yet, add it to the table under the letters. When you get that letter, the row turns green and its button adds a free <b>Re-read</b> row to your lead log.</li>
-  <li><b>Build your case</b> on pages II and III: suspects, statements, clues, timeline and theories. The warnings box flags contradictions as you go.</li>
+  <li><b>Don't count free things.</b> The directory, the newspapers and going back to a lead you already read cost nothing. If you note them, use type <b>N</b> or <b>D</b>, or set Cost to <b>Re-read</b>; those rows are never counted.</li>
+  <li><b>Informants are leads.</b> Tick them under <b>Informants used</b> and log the visit in the lead log as well.</li>
+  <li><b>Build your case</b> on pages II and III: suspects, statements, clues, newspaper notes, timeline and theories. The warnings box flags contradictions, newspapers dated after the case, and addresses you logged twice.</li>
   <li><b>Before reading the questions</b>, work through the verification checklist and <b>seal your theory</b> on page IV.</li>
-  <li><b>Score it.</b> Enter each question's points (Series 1 and 2), Holmes's lead count, and the free-lead addresses from the end of the Solution. Your final score and rating appear straight away.</li>
-  <li><b>Compare.</b> List Holmes's leads to see his route against yours on the map, then check the Scoreboard for your campaign record.</li>
+  <li><b>Score it.</b> Enter each question's points (Series 1 and 2), Holmes's lead count, and the free-lead addresses from the end of the Solution. Your final score and the comparison with Holmes appear straight away.</li>
+  <li><b>Compare.</b> List Holmes's leads to see his route against yours on the map, then check the Scoreboard for your record across the ten cases.</li>
  </ol>
 
  <h2 id="g-object"><span class="ic">❦</span>The game in brief</h2>
- <p>You play the Baker Street Irregulars, the street children who run errands for Holmes (Wiggins, Simpson, Tinker and the rest, sometimes with Watson along). The box holds ten cases. For each one you follow leads around a map of Victorian London, using a directory, a list of informants and the day's newspaper. When you think you've cracked it, you answer the case questions and compare your result with Holmes, who scores 100 every time.</p>
+ <p>You are the Baker Street Irregulars, the street urchins led by Wiggins who were Holmes's "eyes and ears" in London. The box holds ten cases, presented as excerpts from Wiggins's journal. For each one you follow leads around a map of Victorian London, using a directory, a list of informants and the press. When you think you've solved it, you answer two series of questions and compare your result with Holmes, who always scores 100.</p>
 
  <h2 id="g-parts"><span class="ic">⌖</span>What's in the box</h2>
  <h3>Map of London</h3>
  <ul>
-  <li>Divided into five areas, bounded by blue lines and the Thames: <span class="kbd">NW</span> North West, <span class="kbd">WC</span> West Central, <span class="kbd">SW</span> South West, <span class="kbd">EC</span> East Central, <span class="kbd">SE</span> South East.</li>
-  <li>Each area is split into numbered blocks, and addresses use them: Hyde Park is <span class="kbd">95 NW</span>, Buckingham Palace <span class="kbd">35 SW</span>. A number covers a whole block, so several people or places can share one address.</li>
-  <li>Block colours: <b style="color:#a02a20">red</b> = notable places (e.g. the British Museum), <b>black</b> = police stations, <b style="color:#a8823a">yellow</b> = everywhere else you can visit. Owners can change from case to case.</li>
-  <li>The travel-time scale in the corner is for <i>walking</i> speed, useful for testing alibis. Carriages are generally faster.</li>
+  <li>Five areas, bounded by blue lines and the Thames: <span class="kbd">NW</span> North West, <span class="kbd">WC</span> West Centre, <span class="kbd">SW</span> South West, <span class="kbd">EC</span> East Centre, <span class="kbd">SE</span> South East.</li>
+  <li>Numbers inside each area are housing blocks, and they are the addresses. Short form in booklets and the directory: Hyde Park is <span class="kbd">95 NW</span>. Long form in newspapers: "95 Park Lane NW".</li>
+  <li>A number covers a whole block, so a character can share an address with a hotel without living there (e.g. the Hotel Dacre at <span class="kbd">62 EC</span>).</li>
+  <li><b style="color:#a02a20">Red</b> places are fixed landmarks (e.g. the British Museum); <b>black</b> places are police stations. Everything else can change owner from case to case.</li>
+  <li>The <b>travel-time scale</b> in a corner lets you check suspects' movements and alibis. Suspects travel at one fixed speed whatever transport they use. Your own travel time never matters.</li>
  </ul>
  <h3>London Directory</h3>
- <p>Find a person's address here, then read that address's paragraph in the current case booklet. Holmes, for example, is at <span class="kbd">42 NW</span>. Besides the alphabetical list there's a list by profession (doctors, chemists, embassies, pubs, stations…).</p>
- <h3>List of Informants</h3>
- <p>Holmes's regular helpers and their addresses: a medical examiner, a criminologist and others. Their usefulness varies by case. The letter grid for each case is on the back of this sheet.</p>
- <h3>Newspapers</h3>
- <p>One paper per case, dated the day of the case. Ads and articles can open new leads. From the later cases on, earlier 1889 papers can be used too (see <a href="#g-campaign">Campaign</a>).</p>
- <h3>Case booklets</h3>
+ <p>Look up a person, then read the paragraph at that address in the current case. Holmes is listed under "Holmes, Sherlock" at <span class="kbd">42 NW</span>, so to visit him you read 42 NW in the case booklet. Besides the alphabetical list there are entries <b>by profession</b>.</p>
+ <h3>Newspapers (10)</h3>
+ <p>For each case you may use <b>the day's newspaper and every earlier one</b>. Articles and ads can point to new leads. Never use a paper dated after the case. The notebook's newspaper notes show <span class="kbd">⚠ after case date</span> if you log one.</p>
+ <h3>Case books (10)</h3>
  <ul>
-  <li><b>Introduction:</b> the title, date and facts of the case, usually told at Baker Street.</li>
-  <li><b>Leads:</b> paragraphs sorted by area, then by number. Illustrations are only decoration.</li>
-  <li><b>Questions:</b> two series, printed upside down at the back. Series 1 is about the case itself; Series 2 gives extra points for side mysteries.</li>
-  <li><b>Solution:</b> how Holmes solved it, ending with the list of <b>free leads</b>.</li>
-  <li><b>Score:</b> in the envelope at the end: the answers and the points for each.</li>
+  <li><b>Introduction:</b> the facts, usually told during a visit to Holmes.</li>
+  <li><b>Leads:</b> numbered paragraphs, sorted by area and then by number. Illustrations are decoration only.</li>
+  <li><b>Questions:</b> printed upside down. Series 1 is directly about the case; Series 2 gives extra points for related events you uncovered.</li>
+  <li><b>Solution:</b> how Holmes unravelled it, ending with any <b>free leads</b>.</li>
+  <li><b>Score:</b> in the envelope: the answers and their points.</li>
  </ul>
+
+ <h2 id="g-informants"><span class="ic">☏</span>List of Informants</h2>
+ <p>Holmes's regular helpers, listed on the back of the directory. Each has a skill. Not all are useful in every case, and some may be absent. Visiting one is a normal lead.</p>
+ <table class="legend">
+  <tr><td><span class="kbd">38 EC</span></td><td><b>Sir Jasper Meeks</b></td><td>Head medical examiner at St Bartholomew's. Performs the autopsies.</td></tr>
+  <tr><td><span class="kbd">22 SW</span></td><td><b>H.R. Murray</b></td><td>Criminologist. Analyses items and substances.</td></tr>
+  <tr><td><span class="kbd">13 SW</span></td><td><b>Scotland Yard</b></td><td>Inspectors Lestrade and Gregson. Police reports and case details.</td></tr>
+  <tr><td><span class="kbd">14 WC</span></td><td><b>Disraeli O'Brian</b></td><td>Archivist at the National Archives. Legal and criminal records.</td></tr>
+  <tr><td><span class="kbd">17 WC</span></td><td><b>Somerset House</b></td><td>Records of births, deaths, marriages and wills.</td></tr>
+  <tr><td><span class="kbd">36 EC</span></td><td><b>Edward Hall</b></td><td>Old Bailey lawyer. Court cases and legal affairs.</td></tr>
+  <tr><td><span class="kbd">52 EC</span></td><td><b>Porky Shinwell</b></td><td>Owner of the Raven and Rat pub. The underworld and its figures.</td></tr>
+  <tr><td><span class="kbd">18 NW</span></td><td><b>Fred Porlock</b></td><td>Inside Moriarty's organisation. Leaves coded notes at Parsons &amp; Son toy shop.</td></tr>
+  <tr><td><span class="kbd">30 EC</span></td><td><b>Henry Ellis</b></td><td>Reporter, the Times. Current events, mainly foreign affairs.</td></tr>
+  <tr><td><span class="kbd">35 EC</span></td><td><b>Quintin Hogg</b></td><td>Reporter, the Police Gazette. Criminal cases.</td></tr>
+  <tr><td><span class="kbd">8 SW</span></td><td><b>Mycroft Holmes</b></td><td>Politics and government. Usually at the Diogenes Club.</td></tr>
+  <tr><td><span class="kbd">2 SW</span></td><td><b>Langdale Pike</b></td><td>Social columnist. All of society's gossip.</td></tr>
+  <tr><td><span class="kbd">5 WC</span></td><td><b>Central Carriage Depot</b></td><td>Cab drivers' meeting point. Movements of suspects.</td></tr>
+  <tr><td><span class="kbd">5 SW</span></td><td><b>Lomax</b></td><td>Librarian at the London Library. Encyclopedic research.</td></tr>
+  <tr><td><span class="kbd">42 NW</span></td><td><b>Sherlock Holmes</b></td><td>Advice to get you back on track. It may spoil the fun!</td></tr>
+ </table>
+ <p class="hint">The box also includes Holmes's 1886 "lecture" to the Irregulars, a story introducing these same people. It's background reading, not rules.</p>
 
  <h2 id="g-setup"><span class="ic">✉</span>Setup</h2>
  <ol>
-  <li>Agree on a case. Playing in order is recommended so the newspapers don't spoil later cases. Case 10 must be last.</li>
+  <li>Agree on a case. The cases are sorted by date, and playing them in order is recommended so the newspapers don't spoil later cases.</li>
   <li>Put the map in the middle, with the directory and the informants list nearby.</li>
-  <li>Add the newspaper with the case's date. From case 6 on, add every earlier 1889 newspaper too.</li>
-  <li>Grab paper and pencils, or this notebook. One player can keep the notes for everyone.</li>
-  <li>Choose a <b>lead investigator</b>. They take the booklet and read the introduction aloud.</li>
+  <li>Add the newspaper dated the day of the case and all earlier ones. <b>Never use a later paper.</b></li>
+  <li>Grab paper and pencils, or this notebook.</li>
+  <li>Choose a <b>lead investigator</b>. They take the booklet, read the introduction aloud, and the game begins.</li>
  </ol>
 
  <h2 id="g-turn"><span class="ic">⌕</span>Playing a turn</h2>
  <ul>
-  <li>Everyone cooperates. The game is played in turns.</li>
-  <li>The lead investigator picks a destination ("let's go to the crime scene"), looks up the address and turns to that paragraph. If the current case has no paragraph for that address, they simply choose another lead; it costs nothing.</li>
-  <li>They read the paragraph aloud and record it as followed. <b>That is one lead</b>, and it ends their turn. Try not to glance at neighbouring paragraphs.</li>
-  <li>The booklet passes to the left and that player becomes lead investigator.</li>
+  <li>Everyone cooperates, taking turns.</li>
+  <li>The lead investigator chooses a lead ("I want to visit the crime scene"), finds its address and turns to that paragraph. If the current case has no paragraph for that address, they simply choose another lead.</li>
+  <li>They read the paragraph aloud and note that the lead was followed. <b>That is one lead</b>, and it ends their turn. Avoid glancing at the other paragraphs on the page.</li>
+  <li>The booklet passes to the player on the left, who becomes lead investigator.</li>
   <li>Follow as many leads as you like, but only <b>one per turn</b>.</li>
  </ul>
- <div class="gbox"><b>Always free, on any turn:</b> the directory, the case's newspapers, and re-reading leads you have already followed. Talk as much as you like. If you disagree on where to go next, the current lead investigator decides.</div>
+ <div class="gbox"><b>Free and unlimited, on any turn:</b> the directory, the case's newspapers, and re-reading leads you have already visited. Discuss as much as you want. If you disagree on where to go next, the current lead investigator decides.</div>
 
  <h2 id="g-end"><span class="ic">✓</span>Ending a case</h2>
- <p>Stop following leads whenever you like. Answer both series of questions, then one player reads Holmes's solution aloud. Finally, open the envelope and score.</p>
+ <p>Stop following leads whenever you like. Answer both series of questions, then one player reads Holmes's solution aloud. Finally, open the envelope, tally your score and compare it with Holmes's.</p>
 
  <h2 id="g-score"><span class="ic">⚖</span>Scoring</h2>
  <ol>
-  <li><b>Question points (A):</b> add up the points for your correct answers in both series.</li>
-  <li><b>Count your leads.</b> Leave out any that appear on the <b>free leads</b> list at the end of the Solution, and any letter re-reads.</li>
-  <li><b>Compare with Holmes's lead count.</b> For each lead <i>more</i> than Holmes, subtract 5 points. For each lead <i>fewer</i> than Holmes, <b>add</b> 5 points.</li>
+  <li><b>Question points (A):</b> add up the points from both series.</li>
+  <li><b>Count your leads.</b> Leave out any listed as <b>free</b> at the end of the Solution.</li>
+  <li><b>Compare with Holmes's lead count.</b> Subtract 5 points for each lead <i>more</i> than Holmes. Add 5 points for each lead <i>fewer</i> than Holmes.</li>
  </ol>
- <div class="gbox"><b>Final score = A − 5 × (your leads − Holmes's leads)</b><br><span class="hint">A negative difference (fewer leads) gives a bonus. Holmes's score is always 100.</span></div>
+ <div class="gbox"><b>Final score = A − 5 × (your leads − Holmes's leads)</b><br><span class="hint">Fewer leads than Holmes gives a bonus. Holmes's score is always 100.</span></div>
  <div class="gbox ex"><b>Rulebook example:</b> 95 question points, 8 leads followed, Holmes used 6. That's 2 extra leads, so −10 → <b>85</b>.</div>
  <h3>Try it</h3>
  <div class="calc noprint">
@@ -898,54 +920,34 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <label class="f">Holmes's leads<input id="ch" inputmode="numeric" value="6"></label>
   <div><small class="hint">Final score</small><div class="out" id="cout">85</div><div class="rank" id="crank"></div></div>
  </div>
- <p class="hint">In this notebook, <b>Points per lead</b> defaults to 5 and <b>bonus if fewer</b> is on, as the rules say. Turn the bonus off only if your edition says penalties only.</p>
+ <p class="hint">In this notebook, <b>Points per lead</b> defaults to 5 and <b>bonus if fewer</b> is on, as the rules say.</p>
 
- <h2 id="g-bands"><span class="ic">♛</span>How you measure up</h2>
- <table class="legend bands">
-  <tr><td>100 or more</td><td class="rank">Surpassed the Master</td><td>You beat Holmes at his own game. Very few do.</td></tr>
-  <tr><td>70 – 95</td><td class="rank">Excellent Investigator</td><td>Only Holmes could find fault with you.</td></tr>
-  <tr><td>35 – 65</td><td class="rank">Ready for More</td><td>You solved most of the case.</td></tr>
-  <tr><td>30 or less</td><td class="rank">Back to the Tips</td><td>Even good investigators fail sometimes.</td></tr>
- </table>
+ <h2 id="g-holmes"><span class="ic">♛</span>Against Holmes</h2>
+ <p>Holmes always scores <b>100</b>. The rulebook doesn't rank you; you just compare. Beating the Master is clearly hard, but not impossible. The notebook shows <b>Defeated the Master</b> above 100, <b>Level with Holmes</b> at 100, and how many points Holmes wins by below that.</p>
 
- <h2 id="g-campaign"><span class="ic">❖</span>Campaign</h2>
+ <h2 id="g-letters"><span class="ic">Ⓛ</span>Letters (only if your case uses them)</h2>
+ <p>This rulebook has <b>no letters</b>. Some other boxes in the series do: a lead tells you to <b>circle a letter</b>, and later paragraphs ask whether you have it ("Do you have a circled L? If not, you learn nothing here"). If you play one of those cases, switch letters on for it.</p>
  <ul>
-  <li><b>Cases 1–4</b> are independent and can be played in any order. Only the day's newspaper is needed.</li>
-  <li><b>Cases 5–9</b> connect to case 10 and should be played before it, ideally in order. <b>Case 10</b> holds answers about 5–9, so play it last.</li>
-  <li>In the linked cases, <b>every 1889 newspaper dated before the case</b> may be used. The rulebook says "from case 5" in one place and "from case 6" in another; the beginners' tips say only the day's paper matters for cases 1–5.</li>
- </ul>
-
- <h2 id="g-letters"><span class="ic">Ⓛ</span>Use of letters</h2>
- <ul>
-  <li>Some leads tell you to <b>circle a letter</b>. In the box you circle it on the back of the informants list; here, click it in <b>Circled letters</b> on page I.</li>
-  <li>Letters belong to one case only. They open up certain paragraphs, e.g. "Do you have a circled L? If not, you learn nothing at 58 SW."</li>
-  <li><b>Re-reading is free.</b> If you go back to a lead that asked for a letter you didn't have, and you now have it, read the new text straight away. It doesn't cost another lead, unless the text says it does.</li>
- </ul>
- <div class="gbox">In this notebook: add a locked lead to the table under the letters, with the letter it needs. When you circle that letter the row turns green; click <b>Log free re-read</b> to add it to your lead log as a <b>Re-read</b>, which isn't counted. If the paragraph says the re-read does cost a lead, set that row's Cost back to blank.</div>
-
- <h2 id="g-tips"><span class="ic">?</span>Tips for beginners</h2>
- <ul>
-  <li><b>Case booklet:</b> re-read anything that seems odd, and retell the facts in your own words. Look up every person and place mentioned.</li>
-  <li><b>Map:</b> trace routes and street names. It puts the story in context, tests whether testimony hangs together, and shows what's nearby (hotel, theatre…). A partial address like "95 Park Lane" still means block 95, so it tells you the area.</li>
-  <li><b>Directory:</b> addresses in the <span class="kbd">E</span>, <span class="kbd">S</span> and <span class="kbd">QP</span> areas can't be visited unless a lead says otherwise. Look up a suspect's home in the alphabetical list and their profession in the category list. Think by theme: a foreigner → their embassy; a heavy drinker → the nearest pub; a poisoning → a hospital or chemist.</li>
-  <li><b>Newspaper:</b> addresses, background and ads. Pass it round and re-read it often. In later cases, skim the older papers when you're stuck.</li>
-  <li><b>Informants:</b> often a good first stop. Langdale Pike for anything about society, the London Library for research, the Central Carriage Stables for a suspect who crosses London too fast.</li>
-  <li><b>Stuck?</b> Visit Sherlock Holmes at <span class="kbd">42 NW</span> for a hint, or read the questions: you may be closer than you think.</li>
-  <li><b>First games:</b> don't worry about score or lead count. Understanding the story is the real reward. Series 2 questions reward players who explored further.</li>
+  <li><b>Switch:</b> tick <b>This case uses letters</b> in the Case header (or in the Circled letters section). It's set per case and is off for new cases.</li>
+  <li><b>Letters belong to one case.</b> Each case file has its own A–Z row.</li>
+  <li><b>Re-reading with a new letter is free</b> in those boxes, unless the paragraph says otherwise. Put any lead that asked for a missing letter in the table under the letters; when you circle the letter, the row turns green and one click logs a free <b>Re-read</b>.</li>
+  <li>Turning letters off only hides them. Anything you circled is kept and comes back if you switch on again.</li>
  </ul>
 
  <h2 id="g-card"><span class="ic">▤</span>Quick reference card</h2>
  <table class="legend">
-  <tr><td><b>1 lead</b></td><td>Reading one new paragraph from the booklet. One per turn, then pass left.</td></tr>
-  <tr><td><b>Free</b></td><td>Directory · newspapers · re-reading followed leads · re-reading with a newly circled letter · an address with no paragraph · leads on the Solution's free list.</td></tr>
-  <tr><td><b>Areas</b></td><td>NW · WC · SW · EC · SE (E, S, QP not visitable unless stated)</td></tr>
-  <tr><td><b>Holmes</b></td><td>42 NW for tips · always scores 100</td></tr>
+  <tr><td><b>1 lead</b></td><td>Reading one new paragraph from the booklet, including an informant's. One per turn, then pass left.</td></tr>
+  <tr><td><b>Free</b></td><td>Directory · newspapers · re-reading visited leads (and re-reading with a new letter, in cases that use letters) · an address with no paragraph · leads on the Solution's free list</td></tr>
+  <tr><td><b>Areas</b></td><td>NW · WC · SW · EC · SE</td></tr>
+  <tr><td><b>Newspapers</b></td><td>The case's day and all earlier ones, never later</td></tr>
+  <tr><td><b>Holmes</b></td><td>42 NW for advice · always scores 100</td></tr>
   <tr><td><b>Score</b></td><td>Question points − 5 per lead over Holmes, + 5 per lead under</td></tr>
-  <tr><td><b>Ratings</b></td><td>≤30 · 35–65 · 70–95 · 100+</td></tr>
-  <tr><td><b>Campaign</b></td><td>1–4 any order · 5–9 before 10 · older 1889 papers allowed in later cases</td></tr>
+  <tr><td><b>Order</b></td><td>Cases are dated; play them in date order</td></tr>
  </table>
- <p class="hint" style="margin-top:1rem">Sherlock Holmes Consulting Detective is published by Space Cowboys. This page is an unofficial player summary for personal use.</p>
+ <p class="hint" style="margin-top:1rem">Sherlock Holmes Consulting Detective is published by Space Cowboys (distributed by Asmodee). This page is an unofficial player summary for personal use.</p>
  <div class="pagefoot">— Rules &amp; Guide —</div>
+</section>
+</div>
 </section>
 </div>
 </main>
@@ -983,8 +985,8 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
 const KEY='scd-casefiles-v1';
 let store=null, override=null, storageOK=true;
 
-const CONTACTS=[['holmes','Sherlock Holmes · 42 NW (tips when stuck)'],['gossip','Langdale Pike (society gossip)'],['library','The London Library (research)'],['stables','Central Carriage Stables (who went where)'],['coroner','Medical examiner'],['crim','Criminologist'],['yard','Scotland Yard']];
-const VALID_AREAS=['NW','WC','SW','EC','SE'],CLOSED_AREAS=['E','S','QP'];
+// List of Informants (back of the London Directory)
+const CONTACTS=[['coroner','Sir Jasper Meeks · 38 EC (medical examiner)'],['crim','H.R. Murray · 22 SW (criminologist)'],['yard','Scotland Yard · 13 SW (Lestrade & Gregson)'],['archive','Disraeli O\'Brian · 14 WC (archives)'],['records','Somerset House · 17 WC (births, deaths, wills)'],['hall','Edward Hall · 36 EC (Old Bailey lawyer)'],['under','Porky Shinwell · 52 EC (underworld)'],['porlock','Fred Porlock · 18 NW (Moriarty)'],['ellis','Henry Ellis · 30 EC (the Times)'],['hogg','Quintin Hogg · 35 EC (Police Gazette)'],['mycroft','Mycroft Holmes · 8 SW (government)'],['gossip','Langdale Pike · 2 SW (society gossip)'],['stables','Central Carriage Depot · 5 WC (cab drivers)'],['library','Lomax · 5 SW (London Library)'],['holmes','Sherlock Holmes · 42 NW (advice when stuck)']];
 const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const VERIFY=['I can say who did it, how, and why','Every claim is backed by a clue with a lead #','The culprit has motive, means and opportunity','The timeline is consistent, with no impossible movements','The alibis of the other main suspects are checked','Nothing on the pinboard contradicts my theory','The obvious red herrings are ruled out','Newspapers used are dated on or before the case date'];
 
@@ -1009,7 +1011,7 @@ const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?
 function blankCase(big){
  const c={id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:Date.now(),
   f:{no:'',title:'',box:'',caseDate:'',played:big?'':new Date().toISOString().slice(0,10),players:'',start:'',finish:'',client:'',crime:'',where:'',when:'',keyNames:'',impressions:'',gut:'',
-     districts:'NW, WC, SW, EC, SE',contactOther:'',who:'',how:'',why:'',other:'',conf:'50',holmesLeads:'',penalty:'5',leadBonus:'1',freeLeads:'',holmesScore:'100',missed:'',best:'',herring:'',fun:'',fair:''},
+     districts:'NW, WC, SW, EC, SE',contactOther:'',who:'',how:'',why:'',other:'',conf:'50',holmesLeads:'',penalty:'5',leadBonus:'1',freeLeads:'',useLetters:'0',holmesScore:'100',missed:'',best:'',herring:'',fun:'',fair:''},
   t:{},contacts:{},verify:[],sealed:null,pos:{},letters:{}};
  const n=big?{leads:25,locked:4,suspects:8,ties:6,clues:8,papers:5,timeline:8,openq:5,score:8,statements:5,holmes:8,theories:2}:{leads:8,locked:2,suspects:4,ties:3,clues:4,papers:2,timeline:4,openq:3,score:5,statements:3,holmes:0,theories:2};
  for(const k in n){c.t[k]=[];for(let i=0;i<n[k];i++)c.t[k].push(newRow(k,i))}
@@ -1029,7 +1031,8 @@ function load(){
  store.notes=store.notes||{};store.deleted=store.deleted||{};store.shared=normShared(store.shared);
  store.order.forEach(id=>normalize(store.cases[id]));
 }
-function normalize(c){const b=blankCase();c.f=Object.assign({},b.f,c.f||{});c.t=c.t||{};for(const k in b.t)if(!Array.isArray(c.t[k]))c.t[k]=b.t[k];c.t.clues.forEach(r=>{if(!r.id)r.id=rid()});c.t.theories.forEach(r=>{if(!r.id)r.id=rid();r.pro=Array.isArray(r.pro)?r.pro:[];r.con=Array.isArray(r.con)?r.con:[]});c.contacts=c.contacts||{};c.verify=c.verify||[];c.pos=c.pos||{};c.letters=c.letters&&typeof c.letters==='object'?c.letters:{};return c}
+function normalize(c){const hadUL=!!(c.f&&(c.f.useLetters==='1'||c.f.useLetters==='0'));const b=blankCase();c.f=Object.assign({},b.f,c.f||{});c.t=c.t||{};for(const k in b.t)if(!Array.isArray(c.t[k]))c.t[k]=b.t[k];c.t.clues.forEach(r=>{if(!r.id)r.id=rid()});c.t.theories.forEach(r=>{if(!r.id)r.id=rid();r.pro=Array.isArray(r.pro)?r.pro:[];r.con=Array.isArray(r.con)?r.con:[]});c.contacts=c.contacts||{};c.verify=c.verify||[];c.pos=c.pos||{};c.letters=c.letters&&typeof c.letters==='object'?c.letters:{};
+ if(!hadUL)c.f.useLetters=(Object.keys(c.letters).length||(c.t.locked||[]).some(r=>String(r.addr||r.need||'').trim()))?'1':'0';return c}
 let saveT;
 function save(touched){
  if(override)return;
@@ -1098,8 +1101,10 @@ function bindFields(){
 }
 /* ---------- circled letters ---------- */
 const needOf=r=>{const m=String(r&&r.need||'').toUpperCase().match(/[A-Z]/);return m?m[0]:''};
+const lettersOn=c=>c&&c.f.useLetters==='1';
 function renderLetters(){
- const c=cur(),want=new Set(c.t.locked.filter(r=>!r.done).map(needOf).filter(Boolean));
+ const c=cur(),on=lettersOn(c);$$('.lettersChk').forEach(x=>x.checked=on);$('#lettersBody').classList.toggle('hidden',!on);$('#lettersOff').classList.toggle('hidden',on);if(!on)return;
+ const want=new Set(c.t.locked.filter(r=>!r.done).map(needOf).filter(Boolean));
  $('#letters').innerHTML=LETTERS.map(L=>{const on=!!c.letters[L];return '<button type="button" class="lt'+(on?' on':want.has(L)?' want':'')+'" data-letter="'+L+'" aria-pressed="'+on+'" title="'+(on?'Circled. Click to uncircle':want.has(L)?'A lead is waiting for this letter':'Click to circle')+'">'+L+'</button>'}).join('');
  const got=LETTERS.filter(L=>c.letters[L]);const ae=document.activeElement;if(ae&&ae.dataset&&ae.dataset.lsrc&&$('#lsrc').contains(ae))return;
  $('#lsrc').innerHTML=got.length?got.map(L=>'<label><b>'+L+'</b><input data-lsrc="'+L+'" value="'+esc(c.letters[L].src||'')+'" placeholder="from lead…" aria-label="Where letter '+L+' came from"></label>').join(''):'<span class="hint">No letters circled yet.</span>';
@@ -1152,9 +1157,9 @@ function derived(){
  const max=Math.max(30,Math.ceil(Math.max(n,h)/15)*15);let ch='';
  for(let i=1;i<=max;i++){const cls=['cc'];if(i<=n)cls.push(h&&i>h?'over':'used');if(h&&i===h)cls.push('holmes');ch+='<div class="'+cls.join(' ')+'" data-cc="'+i+'" title="Set Holmes\'s count to '+i+'">'+i+'</div>'}
  $('#counter').innerHTML=ch;
- const extra=h?Math.max(0,n-h):0,freeBits=[LI.free?LI.free+' free':'',LI.reread?LI.reread+' letter re-read'+(LI.reread===1?'':'s'):'',LI.notes?LI.notes+' note'+(LI.notes===1?'':'s'):''].filter(Boolean);
+ const extra=h?Math.max(0,n-h):0,freeBits=[LI.free?LI.free+' free':'',LI.reread?LI.reread+' re-read'+(LI.reread===1?'':'s'):'',LI.notes?LI.notes+' note'+(LI.notes===1?'':'s'):''].filter(Boolean);
  $('#counterSum').innerHTML='Leads that count: <b>'+n+'</b>'+(freeBits.length?' <span class="hint">(not counted: '+freeBits.join(', ')+')</span>':'')+' · Holmes: <b>'+(h||'—')+'</b>'+(h?' · '+(n<h?'<b style="color:var(--good)">'+(h-n)+' under Holmes'+(S.bonus?' (+'+fmt((h-n)*S.per)+' pts)':'')+'</b>':n===h?'<b>level with Holmes</b>':'<b>'+extra+' over Holmes (−'+fmt(extra*S.per)+' pts)</b>'):'');
- $$('#t-leads tbody tr').forEach((tr,i)=>{const w=LI.why[i]||'';tr.classList.toggle('freerow',!!w&&w!=='count');tr.dataset.why=w;const td=tr.querySelector('td.num');if(td)td.title=w==='count'?'Counts as a lead':w==='free'?'Free lead: not counted':w==='reread'?'Letter re-read: not counted':w==='note'?'Newspaper/directory note: free':''});
+ $$('#t-leads tbody tr').forEach((tr,i)=>{const w=LI.why[i]||'';tr.classList.toggle('freerow',!!w&&w!=='count');tr.dataset.why=w;const td=tr.querySelector('td.num');if(td)td.title=w==='count'?'Counts as a lead':w==='free'?'Free lead: not counted':w==='reread'?'Re-read: not counted':w==='note'?'Newspaper/directory note: free':''});
  // score
  $('#sS1').textContent=fmt(S.s1);$('#sS2').textContent=fmt(S.s2);
  $('#sA').textContent=fmt(S.A)+(S.avail?' / '+fmt(S.avail):'');$('#sMine').textContent=n;
@@ -1182,9 +1187,9 @@ function derived(){
  if(!$('#campView').classList.contains('hidden'))renderCamp();
 }
 const fmt=v=>Math.round(v*10)/10;
-// rulebook bands (Holmes = 100): 100+ · 70–95 · 35–65 · 30 or less. Scaled if Holmes's score is changed.
-function rank(p){return p>=100?'Surpassed the Master':p>=67.5?'Excellent Investigator':p>=32.5?'Ready for More':'Back to the Tips'}
-function rankText(p){return p>=100?'You are one of the very few to beat Holmes in his own field. Tales of this case may be told for generations.':p>=67.5?'Congratulations. Only Sherlock Holmes could find fault with your work: you have proven yourselves excellent investigators.':p>=32.5?'You solved most of the case. Holmes thinks you are clearly ready to take on more.':'Even good investigators fail sometimes. Look over the tips in Rules & guide and you may do better next time.'}
+// This rulebook has no rating bands: Holmes always scores 100 and you simply compare (p = score as % of Holmes)
+function rank(p){const d=Math.round(100-p);return d<0?'Defeated the Master':d===0?'Level with Holmes':'Holmes wins by '+d}
+function rankText(p){const d=Math.round(100-p);return d<0?'You beat Holmes by '+(-d)+'. The rulebook calls it "clearly hard, but not totally impossible". Well done.':d===0?'You matched the Master exactly. Holmes always scores 100, and so did you.':'Holmes scores 100; you are '+d+' point'+(d===1?'':'s')+' behind. Read his solution to see where his route was shorter.'}
 function names(){
  const c=cur(),s=new Set(['Victim']);
  c.t.suspects.forEach(r=>{const n=String(r.name||'').trim();if(n)s.add(n)});
@@ -1266,7 +1271,7 @@ function renderStats(){
   '<div class="tile"><div class="tl">Average score</div><div class="tv">'+Math.round(avg)+'</div><div class="ts">'+rank(avg)+'</div></div>'+
   '<div class="tile"><div class="tl">Best case</div><div class="tv">'+Math.round(best.pct)+'</div><div class="ts" title="'+esc(best.title)+'">'+esc(best.title)+'</div></div>'+
   '<div class="tile"><div class="tl">Extra leads per case</div><div class="tv">'+(extra==null?'—':(Math.round(extra*10)/10))+'</div><div class="ts">beyond Holmes\'s count</div></div>'+
-  '<div class="tile"><div class="tl">Surpassed the Master</div><div class="tv">'+beat+'</div><div class="ts">case'+(beat===1?'':'s')+'</div></div></div>'+
+  '<div class="tile"><div class="tl">Matched or beat Holmes</div><div class="tv">'+beat+'</div><div class="ts">case'+(beat===1?'':'s')+'</div></div></div>'+
   '<div class="chartbox" id="chA"><h3>Score by case</h3><div class="sub">The line marks Holmes (100). Hover or tap a column for details; click to open the case.</div><svg id="svgA" role="img" aria-label="Score as a percentage of Holmes\'s score for each case"></svg><div class="ttip hidden"></div></div>'+
   (withH.length?'<div class="chartbox" id="chB"><h3>Leads followed: you and Holmes</h3><div class="legend2"><span><i style="background:var(--cMe)"></i>You</span><span><i style="background:var(--cHol)"></i>Holmes</span></div><svg id="svgB" role="img" aria-label="Leads you followed and leads Holmes followed for each case"></svg><div class="ttip hidden"></div></div>':'');
  drawScoreChart(sc);if(withH.length)drawLeadChart(withH);
@@ -1313,8 +1318,8 @@ let statsT;window.addEventListener('resize',()=>{clearTimeout(statsT);statsT=set
 function renderCampProg(){
  const byNo={};store.order.forEach(id=>{const c=store.cases[id],k=parseInt(String(c.f.no||'').trim(),10);if(k>=1&&k<=10){const S=scoreOf(c);if(!byNo[k]||(S.has&&!byNo[k].S.has))byNo[k]={id,S,c}}});
  let h='',tot=0,hol=0,done=0;
- for(let k=1;k<=10;k++){const e=byNo[k];const cls=['cp'];if(k===10)cls.push('ten');if(e)cls.push('go');if(e&&e.S.has){cls.push('sc');tot+=e.S.F;hol+=e.S.hs;done++}
-  h+='<div class="'+cls.join(' ')+'"'+(e?' data-open="'+e.id+'" title="'+esc(e.c.f.title||'Case '+k)+'"':' title="Not started"')+'><small>Case '+k+'</small><b>'+(e&&e.S.has?fmt(e.S.F):e?'…':'—')+'</b>'+(e&&e.S.has?'<span class="rank">'+rank(e.S.pct)+'</span>':'<span class="hint">'+(e?'in progress':k<=4?'standalone':k<10?'leads to 10':'play last')+'</span>')+'</div>'}
+ for(let k=1;k<=10;k++){const e=byNo[k];const cls=['cp'];if(e)cls.push('go');if(e&&e.S.has){cls.push('sc');tot+=e.S.F;hol+=e.S.hs;done++}
+  h+='<div class="'+cls.join(' ')+'"'+(e?' data-open="'+e.id+'" title="'+esc(e.c.f.title||'Case '+k)+'"':' title="Not started"')+'><small>Case '+k+'</small><b>'+(e&&e.S.has?fmt(e.S.F):e?'…':'—')+'</b>'+(e&&e.S.has?'<span class="rank">'+rank(e.S.pct)+'</span>':'<span class="hint">'+(e?'in progress':'not played')+'</span>')+'</div>'}
  $('#camprog').innerHTML=h;
  $('#campSum').innerHTML=done?'Campaign: <b>'+fmt(tot)+'</b> points from '+done+' of 10 cases · Holmes <b>'+fmt(hol)+'</b> · '+(tot>=hol?'<b style="color:var(--good)">you lead the Master by '+fmt(tot-hol)+'</b>':'Holmes leads by <b>'+fmt(hol-tot)+'</b>')+' · average <b>'+fmt(tot/done)+'</b>':'<span class="hint">No numbered cases scored yet.</span>';
 }
@@ -1341,6 +1346,7 @@ function onInput(e){
  else if(el.dataset.v){c.verify[+el.dataset.v]=el.checked}
  else if(el.dataset.lsrc){const L=el.dataset.lsrc;if(c.letters[L]){c.letters[L].src=el.value;save(true)}return}
  else if(el.id==='bonusChk'){c.f.leadBonus=el.checked?'1':'0'}
+ else if(el.classList&&el.classList.contains('lettersChk')){c.f.useLetters=el.checked?'1':'0';save(true);derived();updateRail&&updateRail();return}
  else return;
  if(el.dataset.t)dirFill(el);
  if(el.dataset.t==='clues')scheduleTheories();
@@ -1444,7 +1450,7 @@ const railItems=[];
 $$('#caseView > .sheet').forEach((sh,pi)=>{
  const pg=['I · Investigation','II · Persons & evidence','III · Reasoning','IV · Solution'][pi]||('Page '+(pi+1));
  railItems.push({pg,page:pi+1});
- sh.querySelectorAll('h2').forEach((h,hi)=>{const c=h.cloneNode(true);c.querySelectorAll('.ic,button').forEach(x=>x.remove());h.id=h.id||('sec-'+(pi+1)+'-'+hi);railItems.push({id:h.id,label:c.textContent.trim(),page:pi+1})});
+ sh.querySelectorAll('h2').forEach((h,hi)=>{const c=h.cloneNode(true);c.querySelectorAll('.ic,button,.switch').forEach(x=>x.remove());h.id=h.id||('sec-'+(pi+1)+'-'+hi);railItems.push({id:h.id,label:c.textContent.trim(),page:pi+1})});
 });
 $('#railNav').innerHTML=railItems.map(it=>it.id?'<a href="#'+it.id+'" data-sec="'+it.id+'" data-pg="'+it.page+'">'+esc(it.label)+'</a>':'<div class="pg">'+esc(it.pg)+'</div>').join('');
 $('#railNav').addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();
@@ -1459,8 +1465,8 @@ function updateRail(){
  if(!store)return;const c=cur(),f=c.f,n=leadCount(),h=hCount(c);
  const done=VERIFY.filter((_,i)=>c.verify[i]).length;
  const sus=c.t.suspects.filter(r=>String(r.name||'').trim()).length,clues=c.t.clues.filter(r=>String(r.clue||'').trim()).length;
- const S=scoreOf(c),has=S.has,F=S.F,hs=S.hs,nl=LETTERS.filter(L=>c.letters[L]).length;
- $('#railStatus').innerHTML='<div><span>Leads</span><b>'+n+(h?' / '+h:'')+'</b></div><div><span>Letters</span><b>'+nl+'</b></div><div><span>Warnings</span><b>'+issueCount+'</b></div><div><span>Persons</span><b>'+sus+'</b></div><div><span>Clues pinned</span><b>'+clues+'</b></div><div><span>Checks</span><b>'+done+' / '+VERIFY.length+'</b></div><div><span>Theory</span><b>'+(c.sealed?'Sealed':'Open')+'</b></div>'+(has?'<div><span>Score</span><b>'+fmt(F)+'</b></div>'+(hs?'<div class="rk">'+rank(F/hs*100)+'</div>':''):'');
+ const S=scoreOf(c),has=S.has,F=S.F,hs=S.hs,nl=lettersOn(c)?LETTERS.filter(L=>c.letters[L]).length:-1;
+ $('#railStatus').innerHTML='<div><span>Leads</span><b>'+n+(h?' / '+h:'')+'</b></div>'+(nl<0?'':'<div><span>Letters</span><b>'+nl+'</b></div>')+'<div><span>Warnings</span><b>'+issueCount+'</b></div><div><span>Persons</span><b>'+sus+'</b></div><div><span>Clues pinned</span><b>'+clues+'</b></div><div><span>Checks</span><b>'+done+' / '+VERIFY.length+'</b></div><div><span>Theory</span><b>'+(c.sealed?'Sealed':'Open')+'</b></div>'+(has?'<div><span>Score</span><b>'+fmt(F)+'</b></div>'+(hs?'<div class="rk">'+rank(F/hs*100)+'</div>':''):'');
 }
 
 /* ---------- night mode, split view, directory import ---------- */
@@ -1761,10 +1767,8 @@ function findIssues(c){
  c.t.theories.forEach(t=>{const p=sus[low(t.who)];if(p&&p.status==='Cleared')out.push({bad:true,msg:'Theory <b>'+esc(L(t.title)||'untitled')+'</b> blames '+esc(L(t.who))+', who is cleared.'})});
  if(L(c.f.who)){const p=sus[low(c.f.who)];if(p&&p.status==='Cleared')out.push({bad:true,msg:'Your sealed theory names '+esc(L(c.f.who))+', who is cleared.'})}
  c.t.clues.forEach(k=>{const p=sus[low(k.to)];if(p&&p.status==='Cleared'&&(+k.str||0)>=3)out.push({msg:'A strong clue points to <b>'+esc(L(k.to))+'</b>, who is cleared: "'+esc(L(k.clue).slice(0,60))+'".'})});
- c.t.locked.forEach(r=>{const Lt=needOf(r);if(Lt&&!r.done&&c.letters[Lt])out.push({msg:'You have circled <b>'+Lt+'</b>: re-read <b>'+esc(L(r.addr)||'the locked lead')+'</b> now. It doesn\'t cost a lead.'})});
- c.t.leads.forEach((r,i)=>{const a=areaOf(r.addr);if(a&&CLOSED_AREAS.includes(a))out.push({msg:'Lead '+(i+1)+' is at <b>'+esc(L(r.addr))+'</b>. Addresses in E, S and QP can\'t be visited unless a lead says so.'})});
- {const seenA={};c.t.leads.forEach((r,i)=>{if(!leadFilled(r)||r.cost||r.type==='N'||r.type==='D')return;const a=normAddr(r.addr);if(!a||!/\d/.test(a))return;if(seenA[a])out.push({msg:'<b>'+esc(a)+'</b> is logged twice (leads '+seenA[a]+' and '+(i+1)+'). Re-reading a lead you already followed is free: set the second one\'s Cost to Re-read or remove it.'});else seenA[a]=i+1})}
- if(parseInt(c.f.no,10)===10&&store&&store.order){const played=new Set(store.order.map(id=>store.cases[id]).filter(x=>x&&x!==c&&scoreOf(x).has).map(x=>parseInt(x.f.no,10)));const miss=[5,6,7,8,9].filter(k=>!played.has(k));if(miss.length)out.push({msg:'Case 10 should be played after cases 5–9. Not yet scored: '+miss.join(', ')+'.'})}
+ if(lettersOn(c))c.t.locked.forEach(r=>{const Lt=needOf(r);if(Lt&&!r.done&&c.letters[Lt])out.push({msg:'You have circled <b>'+Lt+'</b>: re-read <b>'+esc(L(r.addr)||'the locked lead')+'</b> now. It doesn\'t cost a lead.'})});
+ {const seenA={};c.t.leads.forEach((r,i)=>{if(!leadFilled(r)||r.cost||r.type==='N'||r.type==='D')return;const a=normAddr(r.addr);if(!a||!/\d/.test(a))return;if(seenA[a])out.push({msg:'<b>'+esc(a)+'</b> is logged twice (leads '+seenA[a]+' and '+(i+1)+'). Re-reading a lead you already visited is free: set the second one\'s Cost to Re-read or remove it.'});else seenA[a]=i+1})}
  paperStates(c).forEach((st,i)=>{if(st.k==='bad')out.push({bad:true,msg:'Newspaper "'+esc(L(c.t.papers[i].item)||L(c.t.papers[i].date))+'" is dated after the case date, so it can\'t be used.'})});
  return out;
 }
