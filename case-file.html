@@ -128,6 +128,61 @@ input[type=checkbox]{width:auto;accent-color:var(--ox);transform:scale(1.15);mar
 .camp tbody tr{cursor:pointer}
 .camp tbody tr:hover td{background:rgba(255,255,255,.45)}
 .camp td{padding:.3rem .25rem}
+/* ---- circled letters ---- */
+.letters{display:grid;grid-template-columns:repeat(13,minmax(0,2.6rem));justify-content:start;gap:7px;margin:.4rem 0 .2rem}
+.lt{aspect-ratio:1;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer;user-select:none;background:transparent;color:var(--ink);padding:0;font-family:inherit}
+.lt:hover{background:rgba(122,31,31,.08)}
+.lt.on{background:var(--ox);border-color:var(--ox);color:#fff;box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--ox)}
+.lt.want{border-style:dashed;border-color:var(--brass);color:var(--brass)}
+.lsrc{display:flex;flex-wrap:wrap;gap:.35rem .8rem;margin:.35rem 0;font-size:13px}
+.lsrc label{display:flex;align-items:center;gap:.3rem}
+.lsrc b{display:inline-flex;width:1.6em;height:1.6em;border-radius:50%;background:var(--ox);color:#fff;align-items:center;justify-content:center;font-size:12px}
+.lsrc input{width:6.5em}
+.lstat{display:inline-block;font-size:12px;padding-top:.3rem;line-height:1.25}
+.lstat.wait{color:var(--muted)}
+.lstat.ready{color:var(--good);font-weight:bold}
+.lstat.done{color:var(--muted);text-decoration:line-through}
+#t-leads tr.freerow td{opacity:.72}
+#t-leads tr.freerow td.num{color:var(--good)}
+#t-leads tr.freerow td.num::after{content:'free';display:block;font-size:9px;font-weight:normal;letter-spacing:.05em}
+#t-leads tr[data-why=note] td.num::after{content:'note'}
+#t-leads tr[data-why=reread] td.num::after{content:'re-read'}
+.guide h2{scroll-margin-top:calc(var(--tbH) + 12px)}
+.rr{font-size:11px;padding:.05rem .4rem;margin-top:.15rem}
+/* ---- scoring ---- */
+.sb.bonus .v{color:var(--good)}
+.sb.pen .v{color:var(--bad)}
+.sb label.tg{display:flex;gap:.3rem;justify-content:center;align-items:center;font-size:12px;margin-top:.15rem}
+.scoreline{font-size:13px;margin:.5rem 0 .2rem;padding:.35rem .55rem;border-left:3px solid var(--brass);background:rgba(255,255,255,.35)}
+.verdict{margin-top:.5rem;border:1.5px solid var(--ox);padding:.45rem .65rem;font-size:14px}
+.verdict b.rank{display:block;font-size:15px}
+.camprog{display:grid;grid-template-columns:repeat(10,1fr);gap:.35rem;margin:.4rem 0}
+.cp{border:1.5px solid var(--line);text-align:center;padding:.3rem .1rem;font-size:12px;cursor:default;line-height:1.25}
+.cp b{display:block;font-size:16px}
+.cp.go{border-color:var(--ink);cursor:pointer}
+.cp.sc{background:var(--ink);color:var(--paper)}
+.cp .rank,.cp .hint{display:block;font-size:9.5px;line-height:1.15;letter-spacing:.03em}
+.cp.sc .rank{color:#e8c77a}
+.cp.ten{border-style:double;border-width:3px}
+/* ---- rules & guide ---- */
+.guide p,.guide li{font-size:14.5px;line-height:1.5}
+.guide h3{font-variant:small-caps;letter-spacing:.06em;color:var(--ox);margin:1rem 0 .2rem;font-size:16px}
+.guide ul,.guide ol{padding-left:1.3rem;margin:.3rem 0}
+.gtoc{display:flex;flex-wrap:wrap;gap:.35rem;margin:.4rem 0 .2rem}
+.gtoc a{border:1px solid var(--line);padding:.1rem .55rem;font-size:13px;color:var(--ink);text-decoration:none;background:rgba(255,255,255,.35)}
+.gtoc a:hover{border-color:var(--ox);color:var(--ox)}
+.gbox{border:1.5px solid var(--ink);padding:.5rem .75rem;margin:.5rem 0;background:rgba(255,255,255,.3)}
+.gbox.ex{border-color:var(--brass);border-style:dashed}
+.kbd{display:inline-block;border:1px solid var(--ink);padding:0 .35rem;font-size:12.5px;font-weight:bold;letter-spacing:.04em}
+.bands td{padding:.3rem .3rem;font-size:14px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.4rem;align-items:end}
+.calc .out{font-size:20px;font-weight:bold;color:var(--ox)}
+.glink{font-size:12px;margin-left:.4rem;color:var(--ox);cursor:pointer;text-decoration:underline;background:none;border:0;padding:0;font-family:inherit}
+body.night .notice{background:#3a2f1c}
+#t-locked{margin-top:.5rem}
+.scorebox .sb.final{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+.sb.final .v{font-size:28px}
+@media (max-width:560px){.letters{grid-template-columns:repeat(7,1fr)}.camprog{grid-template-columns:repeat(5,1fr)}}
 .camp tfoot td{font-weight:bold;border-top:1.5px solid var(--ink)}
 .legend td{padding:.2rem .25rem}
 .pagefoot{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.2em;margin-top:1rem;font-variant:small-caps}
@@ -465,6 +520,7 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
   <button class="tab on" data-view="caseView"><span class="ti">✎</span> <span>Case file</span></button>
   <button class="tab" data-view="mapView"><span class="ti">⌖</span> <span><span class="long">Map of London</span><span class="short">Map</span></span></button>
   <button class="tab" data-view="campView"><span class="ti">♛</span> <span>Scoreboard</span></button>
+  <button class="tab" data-view="guideView"><span class="ti">❧</span> <span><span class="long">Rules &amp; guide</span><span class="short">Rules</span></span></button>
  </nav>
  <span class="spacer"></span>
  <span class="sstat" id="syncStatus"></span>
@@ -578,17 +634,24 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  </div>
 
  <h2><span class="ic">◉</span>Lead counter</h2>
- <p class="hint">Fills in automatically from the lead log. Click a circle to mark Holmes's lead count once it's revealed.</p>
+ <p class="hint">Fills in automatically from the lead log. Only leads that cost you count; free leads and letter re-reads don't. Click a circle to mark Holmes's lead count once it's revealed.</p>
  <div class="counter" id="counter"></div>
  <div class="counter-sum" id="counterSum"></div>
 
- <h2><span class="ic">⌕</span>Lead log</h2>
- <p class="hint">Type: V visit · I interview · N newspaper · C contact · D directory. Useful: Y yes · N no · R red herring. Group play: put initials in "Why".</p>
+ <h2><span class="ic">⌕</span>Lead log<button class="glink noprint" data-guide="g-turn">rules</button></h2>
+ <p class="hint">One row per lead read aloud (one per turn). Address: the booklet section, e.g. <b>42 NW</b>. Type: V visit · I informant · C contact · N newspaper note · D directory note (N and D are free, so they never count). Cost: blank = 1 lead · <b>Free</b> = on Holmes's free-lead list · <b>Re-read</b> = re-read with a newly circled letter. Useful: Y yes · N no · R red herring.</p>
  <table id="t-leads"></table>
  <button class="add" data-add="leads">+ Add lead</button>
 
- <h2><span class="ic">☏</span>Standard contacts</h2>
- <p class="hint">Tick only the ones you actually use. Each one still costs a lead.</p>
+ <h2><span class="ic">Ⓛ</span>Circled letters<button class="glink noprint" data-guide="g-letters">rules</button></h2>
+ <p class="hint">When a lead says "circle the letter X", click it here. Each case has its own letters. Leads that asked for a letter you didn't have go in the table below; once you circle that letter you can re-read them for free (unless the text says otherwise).</p>
+ <div class="letters" id="letters"></div>
+ <div class="lsrc" id="lsrc"></div>
+ <table id="t-locked"></table>
+ <button class="add" data-add="locked">+ Add a lead that needs a letter</button>
+
+ <h2><span class="ic">☏</span>Informants used</h2>
+ <p class="hint">From the List of Informants. Tick the ones you visit. A visit is a normal lead, so log it in the lead log too. Stuck? Sherlock Holmes (42 NW) gives tips.</p>
  <ul class="checks" id="contacts"></ul>
  <div class="pagefoot">— I · The Investigation —</div>
 </section>
@@ -676,26 +739,32 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  </div>
  <div class="fold"><span>✂ fold here before reading the questions ✂</span></div>
 
- <h2><span class="ic">⚖</span>Scoring</h2>
- <p class="hint">Check your edition's rulebook for the question values and lead penalty. Many editions take points off for each lead beyond Holmes's count.</p>
+ <h2><span class="ic">⚖</span>Scoring<button class="glink noprint" data-guide="g-score">rules</button></h2>
+ <p class="hint">Answer both series of questions, then open the envelope. Enter the points for each question: Series 1 is about the case itself, Series 2 gives bonus points for side mysteries.</p>
  <div id="scoreNote"></div>
  <table id="t-score"></table>
  <button class="add" data-add="score">+ Add question</button>
 
- <h2><span class="ic">◆</span>Holmes's leads</h2>
+ <h2><span class="ic">◆</span>Holmes's leads &amp; free leads</h2>
  <p class="hint">Once the solution is revealed, list where Holmes went. His count fills in below, and the map shows his route next to yours.</p>
  <table id="t-holmes"></table>
  <button class="add" data-add="holmes">+ Add Holmes lead</button>
  <div class="hcmp" id="hcmp"></div>
+ <div class="grid" style="margin-top:.5rem"><label class="f wide">Free leads listed at the end of the Solution (addresses, separated by commas)<input data-f="freeLeads" placeholder="e.g. 42 NW, 13 WC"></label></div>
+ <p class="hint">Any lead in your log with one of these addresses is marked free automatically and isn't counted.</p>
  <div class="scorebox">
+  <div class="sb"><small>Series 1 points</small><span class="v" id="sS1">0</span></div>
+  <div class="sb"><small>Series 2 points</small><span class="v" id="sS2">0</span></div>
   <div class="sb"><small>Question points (A)</small><span class="v" id="sA">0</span></div>
-  <div class="sb"><small>My leads</small><span class="v" id="sMine">0</span></div>
+  <div class="sb"><small>My leads (counted)</small><span class="v" id="sMine">0</span><small id="sFree"></small></div>
   <div class="sb"><small>Holmes's leads</small><input data-f="holmesLeads" id="hlInput" inputmode="numeric" aria-label="Holmes's leads"></div>
-  <div class="sb"><small>Penalty per extra lead</small><input data-f="penalty" inputmode="numeric" aria-label="Penalty per extra lead"></div>
-  <div class="sb"><small>Lead penalty (B)</small><span class="v" id="sB">0</span></div>
+  <div class="sb"><small>Points per lead</small><input data-f="penalty" inputmode="numeric" aria-label="Points per lead"><label class="tg noprint"><input type="checkbox" id="bonusChk"> bonus if fewer</label></div>
+  <div class="sb" id="sBbox"><small>Lead adjustment (B)</small><span class="v" id="sB">0</span></div>
   <div class="sb"><small>Holmes's score</small><input data-f="holmesScore" inputmode="numeric" aria-label="Holmes's score"></div>
-  <div class="sb final"><small>Final score (A − B)</small><span class="v" id="sF">0</span><span class="rank" id="sRank"></span></div>
+  <div class="sb final"><small>Final score (A + B)</small><span class="v" id="sF">0</span><span class="rank" id="sRank"></span></div>
  </div>
+ <div class="scoreline" id="scoreLine"></div>
+ <div class="verdict hidden" id="verdict"></div>
 
  <h2><span class="ic">❦</span>Debrief</h2>
  <div class="grid">
@@ -718,23 +787,165 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
  </div>
  <h2><span class="ic">♛</span>Your record</h2>
  <div id="stats"></div>
+ <h2><span class="ic">❖</span>The ten-case campaign<button class="glink noprint" data-guide="g-campaign">rules</button></h2>
+ <p class="hint">Matched by case number (No. 1–10 in the case header). Cases 1–4 stand alone; 5–9 lead into case 10, which should be played last. Click a played case to open it.</p>
+ <div class="camprog" id="camprog"></div>
+ <div class="counter-sum" id="campSum"></div>
  <h2><span class="ic">▤</span>All cases</h2>
- <p class="hint">Every saved case file, in the order you started them. Click a row to open it. Rank = your score as a percentage of Holmes's.</p>
+ <p class="hint">Every saved case file, in the order you started them. Click a row to open it. Holmes always scores 100, so your score is also your percentage of Holmes.</p>
  <div class="tscroll"><table class="camp" id="camp"></table></div>
- <h2><span class="ic">♛</span>Detective ranks</h2>
- <table class="legend">
-  <tr><td>100% or more</td><td class="rank">Equal to Holmes</td></tr>
-  <tr><td>75–99%</td><td class="rank">Chief Inspector</td></tr>
-  <tr><td>50–74%</td><td class="rank">Inspector</td></tr>
-  <tr><td>25–49%</td><td class="rank">Sergeant</td></tr>
-  <tr><td>Under 25%</td><td class="rank">Constable</td></tr>
+ <h2><span class="ic">♛</span>How you measure up (from the rulebook)</h2>
+ <table class="legend bands">
+  <tr><td>100 or more</td><td class="rank">Surpassed the Master</td><td>One of the very few to beat Holmes at his own game.</td></tr>
+  <tr><td>70 – 95</td><td class="rank">Excellent Investigator</td><td>Only Holmes himself could find fault with you.</td></tr>
+  <tr><td>35 – 65</td><td class="rank">Ready for More</td><td>You solved most of the case.</td></tr>
+  <tr><td>30 or less</td><td class="rank">Back to the Tips</td><td>Even good investigators fail. Review the tips and try again.</td></tr>
  </table>
+ <p class="hint">If you've changed Holmes's score for another edition, the bands scale to it.</p>
  <h2><span class="ic">✎</span>Notes</h2>
  <div class="grid">
   <label class="f">Favourite case<input data-g="fav"></label>
   <label class="f">Most unfair Holmes deduction<input data-g="unfair"></label>
   <label class="f wide">Other notes<textarea rows="3" data-g="notes"></textarea></label>
  </div>
+</section>
+</div>
+
+<!-- ============ RULES & GUIDE ============ -->
+<div id="guideView" class="view hidden guide">
+<section class="sheet">
+ <div class="masthead">
+  <div class="sup">221B Baker Street · London</div>
+  <h1>Rules &amp; Guide</h1>
+ </div>
+ <p class="hint">A plain-language summary of the <i>Sherlock Holmes Consulting Detective</i> rulebook (Space Cowboys, ten-case box), plus a guide to this notebook. If anything here disagrees with your printed rulebook, the rulebook wins.</p>
+ <nav class="gtoc noprint">
+  <a href="#g-quick">Using this notebook</a><a href="#g-object">The game</a><a href="#g-parts">What's in the box</a><a href="#g-setup">Setup</a><a href="#g-turn">Playing a turn</a><a href="#g-end">Ending a case</a><a href="#g-score">Scoring</a><a href="#g-bands">Ratings</a><a href="#g-campaign">Campaign</a><a href="#g-letters">Letters</a><a href="#g-tips">Tips</a><a href="#g-card">Quick card</a>
+ </nav>
+
+ <h2 id="g-quick"><span class="ic">✎</span>Using this notebook</h2>
+ <ol>
+  <li><b>Start a case.</b> Click <b>+ New case</b> and fill in the header. Put the case number (1–10) in <b>No.</b> so the campaign tracker on the Scoreboard can find it.</li>
+  <li><b>Log every lead you read.</b> One row per lead, with its booklet address (e.g. <span class="kbd">42 NW</span>). The lead counter at the top of page I counts them for you.</li>
+  <li><b>Don't log free things as leads.</b> Reading the newspaper or the directory, and re-reading a lead you already followed, cost nothing. If you want to note them, use type <b>N</b> or <b>D</b>, which are never counted.</li>
+  <li><b>Circle letters.</b> When a lead tells you to circle a letter, click it in <b>Circled letters</b>. If a lead asks for a letter you don't have yet, add it to the table under the letters. When you get that letter, the row turns green and its button adds a free <b>Re-read</b> row to your lead log.</li>
+  <li><b>Build your case</b> on pages II and III: suspects, statements, clues, timeline and theories. The warnings box flags contradictions as you go.</li>
+  <li><b>Before reading the questions</b>, work through the verification checklist and <b>seal your theory</b> on page IV.</li>
+  <li><b>Score it.</b> Enter each question's points (Series 1 and 2), Holmes's lead count, and the free-lead addresses from the end of the Solution. Your final score and rating appear straight away.</li>
+  <li><b>Compare.</b> List Holmes's leads to see his route against yours on the map, then check the Scoreboard for your campaign record.</li>
+ </ol>
+
+ <h2 id="g-object"><span class="ic">❦</span>The game in brief</h2>
+ <p>You play the Baker Street Irregulars, the street children who run errands for Holmes (Wiggins, Simpson, Tinker and the rest, sometimes with Watson along). The box holds ten cases. For each one you follow leads around a map of Victorian London, using a directory, a list of informants and the day's newspaper. When you think you've cracked it, you answer the case questions and compare your result with Holmes, who scores 100 every time.</p>
+
+ <h2 id="g-parts"><span class="ic">⌖</span>What's in the box</h2>
+ <h3>Map of London</h3>
+ <ul>
+  <li>Divided into five areas, bounded by blue lines and the Thames: <span class="kbd">NW</span> North West, <span class="kbd">WC</span> West Central, <span class="kbd">SW</span> South West, <span class="kbd">EC</span> East Central, <span class="kbd">SE</span> South East.</li>
+  <li>Each area is split into numbered blocks, and addresses use them: Hyde Park is <span class="kbd">95 NW</span>, Buckingham Palace <span class="kbd">35 SW</span>. A number covers a whole block, so several people or places can share one address.</li>
+  <li>Block colours: <b style="color:#a02a20">red</b> = notable places (e.g. the British Museum), <b>black</b> = police stations, <b style="color:#a8823a">yellow</b> = everywhere else you can visit. Owners can change from case to case.</li>
+  <li>The travel-time scale in the corner is for <i>walking</i> speed, useful for testing alibis. Carriages are generally faster.</li>
+ </ul>
+ <h3>London Directory</h3>
+ <p>Find a person's address here, then read that address's paragraph in the current case booklet. Holmes, for example, is at <span class="kbd">42 NW</span>. Besides the alphabetical list there's a list by profession (doctors, chemists, embassies, pubs, stations…).</p>
+ <h3>List of Informants</h3>
+ <p>Holmes's regular helpers and their addresses: a medical examiner, a criminologist and others. Their usefulness varies by case. The letter grid for each case is on the back of this sheet.</p>
+ <h3>Newspapers</h3>
+ <p>One paper per case, dated the day of the case. Ads and articles can open new leads. From the later cases on, earlier 1889 papers can be used too (see <a href="#g-campaign">Campaign</a>).</p>
+ <h3>Case booklets</h3>
+ <ul>
+  <li><b>Introduction:</b> the title, date and facts of the case, usually told at Baker Street.</li>
+  <li><b>Leads:</b> paragraphs sorted by area, then by number. Illustrations are only decoration.</li>
+  <li><b>Questions:</b> two series, printed upside down at the back. Series 1 is about the case itself; Series 2 gives extra points for side mysteries.</li>
+  <li><b>Solution:</b> how Holmes solved it, ending with the list of <b>free leads</b>.</li>
+  <li><b>Score:</b> in the envelope at the end: the answers and the points for each.</li>
+ </ul>
+
+ <h2 id="g-setup"><span class="ic">✉</span>Setup</h2>
+ <ol>
+  <li>Agree on a case. Playing in order is recommended so the newspapers don't spoil later cases. Case 10 must be last.</li>
+  <li>Put the map in the middle, with the directory and the informants list nearby.</li>
+  <li>Add the newspaper with the case's date. From case 6 on, add every earlier 1889 newspaper too.</li>
+  <li>Grab paper and pencils, or this notebook. One player can keep the notes for everyone.</li>
+  <li>Choose a <b>lead investigator</b>. They take the booklet and read the introduction aloud.</li>
+ </ol>
+
+ <h2 id="g-turn"><span class="ic">⌕</span>Playing a turn</h2>
+ <ul>
+  <li>Everyone cooperates. The game is played in turns.</li>
+  <li>The lead investigator picks a destination ("let's go to the crime scene"), looks up the address and turns to that paragraph. If the current case has no paragraph for that address, they simply choose another lead; it costs nothing.</li>
+  <li>They read the paragraph aloud and record it as followed. <b>That is one lead</b>, and it ends their turn. Try not to glance at neighbouring paragraphs.</li>
+  <li>The booklet passes to the left and that player becomes lead investigator.</li>
+  <li>Follow as many leads as you like, but only <b>one per turn</b>.</li>
+ </ul>
+ <div class="gbox"><b>Always free, on any turn:</b> the directory, the case's newspapers, and re-reading leads you have already followed. Talk as much as you like. If you disagree on where to go next, the current lead investigator decides.</div>
+
+ <h2 id="g-end"><span class="ic">✓</span>Ending a case</h2>
+ <p>Stop following leads whenever you like. Answer both series of questions, then one player reads Holmes's solution aloud. Finally, open the envelope and score.</p>
+
+ <h2 id="g-score"><span class="ic">⚖</span>Scoring</h2>
+ <ol>
+  <li><b>Question points (A):</b> add up the points for your correct answers in both series.</li>
+  <li><b>Count your leads.</b> Leave out any that appear on the <b>free leads</b> list at the end of the Solution, and any letter re-reads.</li>
+  <li><b>Compare with Holmes's lead count.</b> For each lead <i>more</i> than Holmes, subtract 5 points. For each lead <i>fewer</i> than Holmes, <b>add</b> 5 points.</li>
+ </ol>
+ <div class="gbox"><b>Final score = A − 5 × (your leads − Holmes's leads)</b><br><span class="hint">A negative difference (fewer leads) gives a bonus. Holmes's score is always 100.</span></div>
+ <div class="gbox ex"><b>Rulebook example:</b> 95 question points, 8 leads followed, Holmes used 6. That's 2 extra leads, so −10 → <b>85</b>.</div>
+ <h3>Try it</h3>
+ <div class="calc noprint">
+  <label class="f">Question points<input id="cq" inputmode="numeric" value="95"></label>
+  <label class="f">Your leads (not free)<input id="cn" inputmode="numeric" value="8"></label>
+  <label class="f">Holmes's leads<input id="ch" inputmode="numeric" value="6"></label>
+  <div><small class="hint">Final score</small><div class="out" id="cout">85</div><div class="rank" id="crank"></div></div>
+ </div>
+ <p class="hint">In this notebook, <b>Points per lead</b> defaults to 5 and <b>bonus if fewer</b> is on, as the rules say. Turn the bonus off only if your edition says penalties only.</p>
+
+ <h2 id="g-bands"><span class="ic">♛</span>How you measure up</h2>
+ <table class="legend bands">
+  <tr><td>100 or more</td><td class="rank">Surpassed the Master</td><td>You beat Holmes at his own game. Very few do.</td></tr>
+  <tr><td>70 – 95</td><td class="rank">Excellent Investigator</td><td>Only Holmes could find fault with you.</td></tr>
+  <tr><td>35 – 65</td><td class="rank">Ready for More</td><td>You solved most of the case.</td></tr>
+  <tr><td>30 or less</td><td class="rank">Back to the Tips</td><td>Even good investigators fail sometimes.</td></tr>
+ </table>
+
+ <h2 id="g-campaign"><span class="ic">❖</span>Campaign</h2>
+ <ul>
+  <li><b>Cases 1–4</b> are independent and can be played in any order. Only the day's newspaper is needed.</li>
+  <li><b>Cases 5–9</b> connect to case 10 and should be played before it, ideally in order. <b>Case 10</b> holds answers about 5–9, so play it last.</li>
+  <li>In the linked cases, <b>every 1889 newspaper dated before the case</b> may be used. The rulebook says "from case 5" in one place and "from case 6" in another; the beginners' tips say only the day's paper matters for cases 1–5.</li>
+ </ul>
+
+ <h2 id="g-letters"><span class="ic">Ⓛ</span>Use of letters</h2>
+ <ul>
+  <li>Some leads tell you to <b>circle a letter</b>. In the box you circle it on the back of the informants list; here, click it in <b>Circled letters</b> on page I.</li>
+  <li>Letters belong to one case only. They open up certain paragraphs, e.g. "Do you have a circled L? If not, you learn nothing at 58 SW."</li>
+  <li><b>Re-reading is free.</b> If you go back to a lead that asked for a letter you didn't have, and you now have it, read the new text straight away. It doesn't cost another lead, unless the text says it does.</li>
+ </ul>
+ <div class="gbox">In this notebook: add a locked lead to the table under the letters, with the letter it needs. When you circle that letter the row turns green; click <b>Log free re-read</b> to add it to your lead log as a <b>Re-read</b>, which isn't counted. If the paragraph says the re-read does cost a lead, set that row's Cost back to blank.</div>
+
+ <h2 id="g-tips"><span class="ic">?</span>Tips for beginners</h2>
+ <ul>
+  <li><b>Case booklet:</b> re-read anything that seems odd, and retell the facts in your own words. Look up every person and place mentioned.</li>
+  <li><b>Map:</b> trace routes and street names. It puts the story in context, tests whether testimony hangs together, and shows what's nearby (hotel, theatre…). A partial address like "95 Park Lane" still means block 95, so it tells you the area.</li>
+  <li><b>Directory:</b> addresses in the <span class="kbd">E</span>, <span class="kbd">S</span> and <span class="kbd">QP</span> areas can't be visited unless a lead says otherwise. Look up a suspect's home in the alphabetical list and their profession in the category list. Think by theme: a foreigner → their embassy; a heavy drinker → the nearest pub; a poisoning → a hospital or chemist.</li>
+  <li><b>Newspaper:</b> addresses, background and ads. Pass it round and re-read it often. In later cases, skim the older papers when you're stuck.</li>
+  <li><b>Informants:</b> often a good first stop. Langdale Pike for anything about society, the London Library for research, the Central Carriage Stables for a suspect who crosses London too fast.</li>
+  <li><b>Stuck?</b> Visit Sherlock Holmes at <span class="kbd">42 NW</span> for a hint, or read the questions: you may be closer than you think.</li>
+  <li><b>First games:</b> don't worry about score or lead count. Understanding the story is the real reward. Series 2 questions reward players who explored further.</li>
+ </ul>
+
+ <h2 id="g-card"><span class="ic">▤</span>Quick reference card</h2>
+ <table class="legend">
+  <tr><td><b>1 lead</b></td><td>Reading one new paragraph from the booklet. One per turn, then pass left.</td></tr>
+  <tr><td><b>Free</b></td><td>Directory · newspapers · re-reading followed leads · re-reading with a newly circled letter · an address with no paragraph · leads on the Solution's free list.</td></tr>
+  <tr><td><b>Areas</b></td><td>NW · WC · SW · EC · SE (E, S, QP not visitable unless stated)</td></tr>
+  <tr><td><b>Holmes</b></td><td>42 NW for tips · always scores 100</td></tr>
+  <tr><td><b>Score</b></td><td>Question points − 5 per lead over Holmes, + 5 per lead under</td></tr>
+  <tr><td><b>Ratings</b></td><td>≤30 · 35–65 · 70–95 · 100+</td></tr>
+  <tr><td><b>Campaign</b></td><td>1–4 any order · 5–9 before 10 · older 1889 papers allowed in later cases</td></tr>
+ </table>
+ <p class="hint" style="margin-top:1rem">Sherlock Holmes Consulting Detective is published by Space Cowboys. This page is an unofficial player summary for personal use.</p>
+ <div class="pagefoot">— Rules &amp; Guide —</div>
 </section>
 </div>
 </main>
@@ -772,12 +983,15 @@ body.night .issues li.bad{background:rgba(240,137,122,.08)}
 const KEY='scd-casefiles-v1';
 let store=null, override=null, storageOK=true;
 
-const CONTACTS=[['yard','Scotland Yard'],['irr','Street informants (the Irregulars)'],['gossip','Society gossip informant'],['archive','Newspaper archive'],['coroner','Coroner / hospital / police surgeon'],['records','Records office (births, marriages, wills)'],['under','Underworld informant']];
+const CONTACTS=[['holmes','Sherlock Holmes · 42 NW (tips when stuck)'],['gossip','Langdale Pike (society gossip)'],['library','The London Library (research)'],['stables','Central Carriage Stables (who went where)'],['coroner','Medical examiner'],['crim','Criminologist'],['yard','Scotland Yard']];
+const VALID_AREAS=['NW','WC','SW','EC','SE'],CLOSED_AREAS=['E','S','QP'];
+const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const VERIFY=['I can say who did it, how, and why','Every claim is backed by a clue with a lead #','The culprit has motive, means and opportunity','The timeline is consistent, with no impossible movements','The alibis of the other main suspects are checked','Nothing on the pinboard contradicts my theory','The obvious red herrings are ruled out','Newspapers used are dated on or before the case date'];
 
 // column: [key, label, type, options, width, datalist]
 const COLS={
- leads:{num:true,cols:[['type','Type','sel',['','V','I','N','C','D'],'3.6em'],['who','Where / who','txt',null,'20%','dir'],['addr','Address','addr',null,'6em'],['why','Why I went','area'],['learned','What I learned','area',null,'32%'],['useful','Useful?','sel',['','Y','N','R'],'4em']]},
+ leads:{num:true,cols:[['type','Type','sel',['','V','I','C','N','D'],'3.6em'],['who','Where / who','txt',null,'18%','dir'],['addr','Address','addr',null,'6em'],['cost','Cost','sel',['','Free','Re-read'],'6.2em'],['why','Why I went','area'],['learned','What I learned','area',null,'30%'],['useful','Useful?','sel',['','Y','N','R'],'4em']]},
+ locked:{cols:[['addr','Lead address','txt',null,'7em'],['need','Letter needed','txt',null,'4.5em'],['note','What it said / why it matters','area'],['st','Status','lst',null,'10em']]},
  suspects:{cols:[['name','Name','txt',null,'15%','dir'],['rel','Relation to victim'],['addr','Address','txt',null,'5em'],['m','M','chk',null,'1.8em'],['me','Me','chk',null,'1.8em'],['o','O','chk',null,'1.8em'],['alibi','Alibi','area'],['chk','Checked','sel',['?','✓','✗'],'3.6em'],['sus','Suspicion','dots',5,'6em'],['status','Status','sel',['','Cleared','Suspicious','Prime suspect'],'7.5em']]},
  ties:{cols:[['a','Person A','txt',null,'26%','names'],['tie','Tie (married, owes money, rival…)'],['b','Person B','txt',null,'26%','names'],['lead','Lead #','txt',null,'4em']]},
  papers:{cols:[['date','Paper date','txt',null,'8em'],['item','Headline / item'],['why','Why it matters','area'],['dchk','Check','calc',null,'8.5em']]},
@@ -785,7 +999,7 @@ const COLS={
  statements:{cols:[['who','Who said it','txt',null,'16%','names'],['about','About','txt',null,'14%','names'],['said','What they said','area'],['lead','Lead','txt',null,'3.5em'],['verdict','Verdict','sel',['Unverified','True','Lie','Partly true'],'7.5em']]},
  holmes:{num:true,numLabel:'Holmes',cols:[['who','Where / who','txt',null,'40%','dir'],['addr','Address','addr',null,'8em'],['note','Note']]},
  openq:{cols:[['q','Question or contradiction','area'],['lead','Lead to try','txt',null,'30%'],['pri','Priority','sel',['','H','M','L'],'4.5em']]},
- score:{cols:[['q','Question','txt',null,'6em'],['avail','Points available'],['earned','Points earned']]}
+ score:{cols:[['q','Question','txt',null,'5em'],['series','Series','sel',['1','2'],'4.5em'],['avail','Points available'],['earned','Points earned']]}
 };
 
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
@@ -795,15 +1009,15 @@ const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?
 function blankCase(big){
  const c={id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:Date.now(),
   f:{no:'',title:'',box:'',caseDate:'',played:big?'':new Date().toISOString().slice(0,10),players:'',start:'',finish:'',client:'',crime:'',where:'',when:'',keyNames:'',impressions:'',gut:'',
-     districts:'',contactOther:'',who:'',how:'',why:'',other:'',conf:'50',holmesLeads:'',penalty:'5',holmesScore:'100',missed:'',best:'',herring:'',fun:'',fair:''},
-  t:{},contacts:{},verify:[],sealed:null,pos:{}};
- const n=big?{leads:25,suspects:8,ties:6,clues:8,papers:5,timeline:8,openq:5,score:6,statements:5,holmes:8,theories:2}:{leads:8,suspects:4,ties:3,clues:4,papers:2,timeline:4,openq:3,score:5,statements:3,holmes:0,theories:2};
+     districts:'NW, WC, SW, EC, SE',contactOther:'',who:'',how:'',why:'',other:'',conf:'50',holmesLeads:'',penalty:'5',leadBonus:'1',freeLeads:'',holmesScore:'100',missed:'',best:'',herring:'',fun:'',fair:''},
+  t:{},contacts:{},verify:[],sealed:null,pos:{},letters:{}};
+ const n=big?{leads:25,locked:4,suspects:8,ties:6,clues:8,papers:5,timeline:8,openq:5,score:8,statements:5,holmes:8,theories:2}:{leads:8,locked:2,suspects:4,ties:3,clues:4,papers:2,timeline:4,openq:3,score:5,statements:3,holmes:0,theories:2};
  for(const k in n){c.t[k]=[];for(let i=0;i<n[k];i++)c.t[k].push(newRow(k,i))}
  return c;
 }
 const cur=()=>override||store.cases[store.current];
 const rid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
-function newRow(k,i){if(k==='score')return {q:String(i+1)};if(k==='clues')return {id:rid()};if(k==='theories')return {id:rid(),title:'Theory '+'ABCD'[i%4],conf:'50',pro:[],con:[]};return {}}
+function newRow(k,i){if(k==='score')return {q:String(i+1),series:'1'};if(k==='clues')return {id:rid()};if(k==='theories')return {id:rid(),title:'Theory '+'ABCD'[i%4],conf:'50',pro:[],con:[]};return {}}
 const normShared=x=>{x=x&&typeof x==='object'?x:{};return {maps:Array.isArray(x.maps)?x.maps:[],pins:x.pins&&typeof x.pins==='object'?x.pins:{},directory:Array.isArray(x.directory)?x.directory:[],updated:x.updated||0}};
 
 function load(){
@@ -815,7 +1029,7 @@ function load(){
  store.notes=store.notes||{};store.deleted=store.deleted||{};store.shared=normShared(store.shared);
  store.order.forEach(id=>normalize(store.cases[id]));
 }
-function normalize(c){const b=blankCase();c.f=Object.assign({},b.f,c.f||{});c.t=c.t||{};for(const k in b.t)if(!Array.isArray(c.t[k]))c.t[k]=b.t[k];c.t.clues.forEach(r=>{if(!r.id)r.id=rid()});c.t.theories.forEach(r=>{if(!r.id)r.id=rid();r.pro=Array.isArray(r.pro)?r.pro:[];r.con=Array.isArray(r.con)?r.con:[]});c.contacts=c.contacts||{};c.verify=c.verify||[];c.pos=c.pos||{};return c}
+function normalize(c){const b=blankCase();c.f=Object.assign({},b.f,c.f||{});c.t=c.t||{};for(const k in b.t)if(!Array.isArray(c.t[k]))c.t[k]=b.t[k];c.t.clues.forEach(r=>{if(!r.id)r.id=rid()});c.t.theories.forEach(r=>{if(!r.id)r.id=rid();r.pro=Array.isArray(r.pro)?r.pro:[];r.con=Array.isArray(r.con)?r.con:[]});c.contacts=c.contacts||{};c.verify=c.verify||[];c.pos=c.pos||{};c.letters=c.letters&&typeof c.letters==='object'?c.letters:{};return c}
 let saveT;
 function save(touched){
  if(override)return;
@@ -848,9 +1062,10 @@ function cellHTML(name,i,c,r){
  if(type==='area')return '<textarea rows="1" '+a+'>'+esc(v)+'</textarea>';
  if(type==='addr')return '<span class="addrc"><input type="text" '+a+' value="'+esc(v)+'"><button class="goto" data-goto="'+i+'" data-gotot="'+name+'" title="Show on map" aria-label="Show on map">⌖</button></span>';
  if(type==='calc')return '<span class="dchk" data-dchk="'+i+'"></span>';
+ if(type==='lst')return '<span class="lstat" data-lstat="'+i+'"></span>';
  return '<input type="text" '+a+' value="'+esc(v)+'"'+(c[5]?' list="'+c[5]+'"':'')+'>';
 }
-const WIDE={leads:['who','why','learned'],suspects:['name','rel','alibi'],ties:['tie'],papers:['item','why'],timeline:['ev'],openq:['q','lead'],score:[],statements:['said'],holmes:['who','note']};
+const WIDE={locked:['note'],leads:['who','why','learned'],suspects:['name','rel','alibi'],ties:['tie'],papers:['item','why'],timeline:['ev'],openq:['q','lead'],score:[],statements:['said'],holmes:['who','note']};
 function renderTable(name){
  const spec=COLS[name],rows=cur().t[name],el=$('#t-'+name);if(!el)return;
  let h='<thead><tr>'+(spec.num?'<th>#</th>':'')+spec.cols.map(c=>'<th'+(c[4]?' style="width:'+c[4]+'"':'')+'>'+esc(c[1])+'</th>').join('')+'<th class="x"></th></tr></thead><tbody>';
@@ -879,35 +1094,80 @@ function bindFields(){
  const c=cur();
  $$('[data-f]').forEach(el=>{el.value=c.f[el.dataset.f]==null?'':c.f[el.dataset.f];if(el.tagName==='TEXTAREA')grow(el)});
  $$('[data-g]').forEach(el=>{el.value=store.notes[el.dataset.g]||'';if(el.tagName==='TEXTAREA')grow(el)});
+ $('#bonusChk').checked=c.f.leadBonus!=='0';
+}
+/* ---------- circled letters ---------- */
+const needOf=r=>{const m=String(r&&r.need||'').toUpperCase().match(/[A-Z]/);return m?m[0]:''};
+function renderLetters(){
+ const c=cur(),want=new Set(c.t.locked.filter(r=>!r.done).map(needOf).filter(Boolean));
+ $('#letters').innerHTML=LETTERS.map(L=>{const on=!!c.letters[L];return '<button type="button" class="lt'+(on?' on':want.has(L)?' want':'')+'" data-letter="'+L+'" aria-pressed="'+on+'" title="'+(on?'Circled. Click to uncircle':want.has(L)?'A lead is waiting for this letter':'Click to circle')+'">'+L+'</button>'}).join('');
+ const got=LETTERS.filter(L=>c.letters[L]);const ae=document.activeElement;if(ae&&ae.dataset&&ae.dataset.lsrc&&$('#lsrc').contains(ae))return;
+ $('#lsrc').innerHTML=got.length?got.map(L=>'<label><b>'+L+'</b><input data-lsrc="'+L+'" value="'+esc(c.letters[L].src||'')+'" placeholder="from lead…" aria-label="Where letter '+L+' came from"></label>').join(''):'<span class="hint">No letters circled yet.</span>';
+}
+function checkLocked(){
+ const c=cur();
+ $$('[data-lstat]').forEach(el=>{const i=+el.dataset.lstat,r=c.t.locked[i];if(!r){el.innerHTML='';return}const L=needOf(r);
+  if(r.done){el.className='lstat done';el.innerHTML='Re-read ✓ <button class="rr" data-rrundo="'+i+'" title="Mark as not re-read">undo</button>';return}
+  if(!L){el.className='lstat';el.textContent='';return}
+  if(c.letters[L]){el.className='lstat ready';el.innerHTML='Have '+L+': re-read free<br><button class="rr" data-rr="'+i+'">Log free re-read</button>';return}
+  el.className='lstat wait';el.textContent='Waiting for '+L});
+}
+/* ---------- leads & scoring (per the rulebook) ---------- */
+function normAddr(s){const m=String(s||'').toUpperCase().match(/(\d+)\s*([A-Z]{1,2})\b/);return m?m[1]+' '+m[2]:String(s||'').trim().toUpperCase()}
+const areaOf=s=>{const m=String(s||'').toUpperCase().match(/\d+\s*([A-Z]{1,2})\b/);return m?m[1]:''};
+const leadFilled=r=>filled(r,['type','who','addr','why','learned']);
+// why[i]: '' = empty row, 'count' = costs a lead, 'free' | 'reread' | 'note' = doesn't count
+function leadInfo(c){
+ const freeSet=new Set(String(c.f.freeLeads||'').split(/[,;\n]+/).map(normAddr).filter(Boolean));
+ const o={n:0,free:0,reread:0,notes:0,total:0,why:[]};
+ c.t.leads.forEach((r,i)=>{if(!leadFilled(r)){o.why[i]='';return}o.total++;let w='count';
+  if(r.type==='N'||r.type==='D')w='note';else if(r.cost==='Re-read')w='reread';else if(r.cost==='Free'||(String(r.addr||'').trim()&&freeSet.has(normAddr(r.addr))))w='free';
+  o.why[i]=w;if(w==='count')o.n++;else if(w==='free')o.free++;else if(w==='reread')o.reread++;else o.notes++});
+ return o;
+}
+function scoreOf(c){
+ const f=c.f,L=leadInfo(c),n=L.n,h=hCount(c),rows=c.t.score;
+ const s1=rows.filter(r=>r.series!=='2').reduce((s,r)=>s+num(r.earned),0),s2=rows.filter(r=>r.series==='2').reduce((s,r)=>s+num(r.earned),0);
+ const avail=rows.reduce((s,r)=>s+num(r.avail),0),A=s1+s2,per=num(f.penalty),bonus=f.leadBonus!=='0';
+ const diff=h?n-h:0,B=!h?0:diff>0?-diff*per:bonus?-diff*per:0,F=A+B,hs=num(f.holmesScore);
+ const has=rows.some(r=>String(r.earned||'').trim());
+ return {L,n,h,s1,s2,A,avail,per,bonus,diff,B,F,hs,has,pct:has&&hs?F/hs*100:null};
 }
 function renderSelect(){
  $('#caseSel').innerHTML=store.order.map(id=>{const f=store.cases[id].f;return '<option value="'+id+'"'+(id===store.current?' selected':'')+'>'+esc(label(f))+'</option>'}).join('');
 }
 const label=f=>(f.no?'No. '+f.no+' · ':'')+(f.title||'Untitled case');
 function renderAll(){
- Object.keys(COLS).forEach(renderTable);renderPin();renderTheories();if(mv.open)openMap();renderChecks();bindFields();renderSelect();renderSeal();derived();
+ Object.keys(COLS).forEach(renderTable);renderPin();renderTheories();if(mv.open)openMap();renderChecks();bindFields();renderSelect();renderSeal();renderLetters();derived();
 }
 
 /* ---------- derived ---------- */
 const filled=(r,ks)=>ks.some(k=>String(r[k]||'').trim());
 const holmesRows=c=>(c.t.holmes||[]).filter(r=>filled(r,['who','addr']));
 function hCount(c){const v=Math.round(num(c.f.holmesLeads));return v>0?v:holmesRows(c).length}
-function leadCount(){return cur().t.leads.filter(r=>['type','who','addr','why','learned'].some(k=>String(r[k]||'').trim())).length}
+function leadCount(){return leadInfo(cur()).n}
 function derived(){
- const c=cur(),f=c.f,n=leadCount(),h=hCount(c);
+ const c=cur(),f=c.f,S=scoreOf(c),n=S.n,h=S.h,LI=S.L;
  // counter
  const max=Math.max(30,Math.ceil(Math.max(n,h)/15)*15);let ch='';
  for(let i=1;i<=max;i++){const cls=['cc'];if(i<=n)cls.push(h&&i>h?'over':'used');if(h&&i===h)cls.push('holmes');ch+='<div class="'+cls.join(' ')+'" data-cc="'+i+'" title="Set Holmes\'s count to '+i+'">'+i+'</div>'}
  $('#counter').innerHTML=ch;
- const extra=h?Math.max(0,n-h):0;
- $('#counterSum').innerHTML='Leads followed: <b>'+n+'</b> · Holmes: <b>'+(h||'—')+'</b>'+(h?' · '+(n<=h?'<b style="color:var(--good)">'+(h-n)+' under Holmes</b>':'Extra leads: <b>'+extra+'</b>'):'');
+ const extra=h?Math.max(0,n-h):0,freeBits=[LI.free?LI.free+' free':'',LI.reread?LI.reread+' letter re-read'+(LI.reread===1?'':'s'):'',LI.notes?LI.notes+' note'+(LI.notes===1?'':'s'):''].filter(Boolean);
+ $('#counterSum').innerHTML='Leads that count: <b>'+n+'</b>'+(freeBits.length?' <span class="hint">(not counted: '+freeBits.join(', ')+')</span>':'')+' · Holmes: <b>'+(h||'—')+'</b>'+(h?' · '+(n<h?'<b style="color:var(--good)">'+(h-n)+' under Holmes'+(S.bonus?' (+'+fmt((h-n)*S.per)+' pts)':'')+'</b>':n===h?'<b>level with Holmes</b>':'<b>'+extra+' over Holmes (−'+fmt(extra*S.per)+' pts)</b>'):'');
+ $$('#t-leads tbody tr').forEach((tr,i)=>{const w=LI.why[i]||'';tr.classList.toggle('freerow',!!w&&w!=='count');tr.dataset.why=w;const td=tr.querySelector('td.num');if(td)td.title=w==='count'?'Counts as a lead':w==='free'?'Free lead: not counted':w==='reread'?'Letter re-read: not counted':w==='note'?'Newspaper/directory note: free':''});
  // score
- const A=c.t.score.reduce((s,r)=>s+num(r.earned),0),avail=c.t.score.reduce((s,r)=>s+num(r.avail),0);
- const B=extra*num(f.penalty),F=A-B,hs=num(f.holmesScore);
- $('#sA').textContent=fmt(A)+(avail?' / '+fmt(avail):'');$('#sMine').textContent=n;$('#sB').textContent=B?'−'+fmt(B):'0';$('#sF').textContent=fmt(F);
- const hasScore=c.t.score.some(r=>String(r.earned||'').trim());
- $('#sRank').textContent=hasScore&&hs>0?rank(F/hs*100)+' · '+Math.round(F/hs*100)+'%':'';
- $('#scoreNote').innerHTML=c.sealed||!hasScore?'':'<div class="notice">Tip: seal your theory before you read the questions.</div>';
+ $('#sS1').textContent=fmt(S.s1);$('#sS2').textContent=fmt(S.s2);
+ $('#sA').textContent=fmt(S.A)+(S.avail?' / '+fmt(S.avail):'');$('#sMine').textContent=n;
+ $('#sFree').textContent=LI.total>n?'+ '+(LI.total-n)+' not counted':'';
+ $('#sB').textContent=S.B>0?'+'+fmt(S.B):S.B<0?'−'+fmt(-S.B):'0';
+ $('#sBbox').classList.toggle('bonus',S.B>0);$('#sBbox').classList.toggle('pen',S.B<0);
+ $('#sF').textContent=fmt(S.F);
+ $('#sRank').textContent=S.pct!=null?rank(S.pct)+(S.hs!==100?' · '+Math.round(S.pct)+'%':''):'';
+ $('#scoreLine').innerHTML=!h?'Enter <b>Holmes\'s lead count</b> (from the Score envelope) to apply the ±'+fmt(S.per)+' per lead adjustment.':
+  'Questions <b>'+fmt(S.A)+'</b> '+(S.diff>0?'− '+fmt(S.per)+' × '+S.diff+' extra lead'+(S.diff===1?'':'s'):S.diff<0?(S.bonus?'+ '+fmt(S.per)+' × '+(-S.diff)+' lead'+(S.diff===-1?'':'s')+' under Holmes':'+ 0 (bonus for fewer leads is off)'):'± 0 (same as Holmes)')+' = <b>'+fmt(S.F)+'</b>'+(S.hs?' · Holmes '+fmt(S.hs):'');
+ const vd=$('#verdict');vd.classList.toggle('hidden',S.pct==null);if(S.pct!=null)vd.innerHTML='<b class="rank">'+rank(S.pct)+'</b>'+rankText(S.pct);
+ $('#scoreNote').innerHTML=c.sealed||!S.has?'':'<div class="notice">Tip: seal your theory before you read the questions.</div>';
+ renderLetters();checkLocked();
  // districts
  const codes=String(f.districts||'').toUpperCase().split(/[,;\s]+/).filter(Boolean);
  const tally={};codes.forEach(k=>tally[k]=0);
@@ -922,7 +1182,9 @@ function derived(){
  if(!$('#campView').classList.contains('hidden'))renderCamp();
 }
 const fmt=v=>Math.round(v*10)/10;
-function rank(p){return p>=100?'Equal to Holmes':p>=75?'Chief Inspector':p>=50?'Inspector':p>=25?'Sergeant':'Constable'}
+// rulebook bands (Holmes = 100): 100+ · 70–95 · 35–65 · 30 or less. Scaled if Holmes's score is changed.
+function rank(p){return p>=100?'Surpassed the Master':p>=67.5?'Excellent Investigator':p>=32.5?'Ready for More':'Back to the Tips'}
+function rankText(p){return p>=100?'You are one of the very few to beat Holmes in his own field. Tales of this case may be told for generations.':p>=67.5?'Congratulations. Only Sherlock Holmes could find fault with your work: you have proven yourselves excellent investigators.':p>=32.5?'You solved most of the case. Holmes thinks you are clearly ready to take on more.':'Even good investigators fail sometimes. Look over the tips in Rules & guide and you may do better next time.'}
 function names(){
  const c=cur(),s=new Set(['Victim']);
  c.t.suspects.forEach(r=>{const n=String(r.name||'').trim();if(n)s.add(n)});
@@ -989,9 +1251,7 @@ $('#sealBtn').addEventListener('click',()=>{
 
 /* ---------- stats dashboard ---------- */
 function caseStats(id){const c=store.cases[id],f=c.f;
- const n=c.t.leads.filter(r=>filled(r,['type','who','addr','why','learned'])).length,h=hCount(c);
- const has=c.t.score.some(r=>String(r.earned||'').trim()),A=c.t.score.reduce((a,r)=>a+num(r.earned),0);
- const F=A-(h?Math.max(0,n-h):0)*num(f.penalty),hs=num(f.holmesScore);
+ const S=scoreOf(c),n=S.n,h=S.h,has=S.has,F=S.F,hs=S.hs;
  return {id,short:f.no?'No. '+f.no:(String(f.title||'').trim().split(/\s+/).slice(0,2).join(' ')||'Case'),title:String(f.title||'').trim()||'Untitled case',n,h,F,hs,pct:has&&hs?F/hs*100:null,has,played:f.played}}
 const sans=v=>Math.round(v).toLocaleString();
 function renderStats(){
@@ -1003,11 +1263,11 @@ function renderStats(){
  const beat=sc.filter(d=>d.pct>=100).length;
  el.innerHTML='<div class="tiles">'+
   '<div class="tile"><div class="tl">Cases scored</div><div class="tv">'+sc.length+'</div><div class="ts">of '+all.length+' started</div></div>'+
-  '<div class="tile"><div class="tl">Average vs Holmes</div><div class="tv">'+Math.round(avg)+'%</div><div class="ts">'+rank(avg)+'</div></div>'+
-  '<div class="tile"><div class="tl">Best case</div><div class="tv">'+Math.round(best.pct)+'%</div><div class="ts" title="'+esc(best.title)+'">'+esc(best.title)+'</div></div>'+
+  '<div class="tile"><div class="tl">Average score</div><div class="tv">'+Math.round(avg)+'</div><div class="ts">'+rank(avg)+'</div></div>'+
+  '<div class="tile"><div class="tl">Best case</div><div class="tv">'+Math.round(best.pct)+'</div><div class="ts" title="'+esc(best.title)+'">'+esc(best.title)+'</div></div>'+
   '<div class="tile"><div class="tl">Extra leads per case</div><div class="tv">'+(extra==null?'—':(Math.round(extra*10)/10))+'</div><div class="ts">beyond Holmes\'s count</div></div>'+
-  '<div class="tile"><div class="tl">Matched or beat Holmes</div><div class="tv">'+beat+'</div><div class="ts">case'+(beat===1?'':'s')+'</div></div></div>'+
-  '<div class="chartbox" id="chA"><h3>Score as a share of Holmes\'s, by case</h3><div class="sub">100% = Holmes\'s score. Hover or tap a column for details; click to open the case.</div><svg id="svgA" role="img" aria-label="Score as a percentage of Holmes\'s score for each case"></svg><div class="ttip hidden"></div></div>'+
+  '<div class="tile"><div class="tl">Surpassed the Master</div><div class="tv">'+beat+'</div><div class="ts">case'+(beat===1?'':'s')+'</div></div></div>'+
+  '<div class="chartbox" id="chA"><h3>Score by case</h3><div class="sub">The line marks Holmes (100). Hover or tap a column for details; click to open the case.</div><svg id="svgA" role="img" aria-label="Score as a percentage of Holmes\'s score for each case"></svg><div class="ttip hidden"></div></div>'+
   (withH.length?'<div class="chartbox" id="chB"><h3>Leads followed: you and Holmes</h3><div class="legend2"><span><i style="background:var(--cMe)"></i>You</span><span><i style="background:var(--cHol)"></i>Holmes</span></div><svg id="svgB" role="img" aria-label="Leads you followed and leads Holmes followed for each case"></svg><div class="ttip hidden"></div></div>':'');
  drawScoreChart(sc);if(withH.length)drawLeadChart(withH);
 }
@@ -1022,11 +1282,11 @@ function bindTips(box,svg,data,fmtTip,anchor){
 function drawScoreChart(data){
  const svg=$('#svgA'),box=$('#chA'),W=Math.max(300,box.clientWidth||600),H=230,M={l:40,r:52,t:18,b:30},iw=W-M.l-M.r,ih=H-M.t-M.b;
  const top=niceMax(Math.max(100,...data.map(d=>d.pct))*1.08,25),y=v=>M.t+ih*(1-Math.max(0,v)/top),band=iw/data.length,bw=Math.min(24,band*.62);
- let g='';for(let v=0;v<=top;v+=top>150?50:25){g+='<line class="gl" x1="'+M.l+'" x2="'+(W-M.r)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text x="'+(M.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end">'+v+'%</text>'}
+ let g='';for(let v=0;v<=top;v+=top>150?50:25){g+='<line class="gl" x1="'+M.l+'" x2="'+(W-M.r)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text x="'+(M.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end">'+v+'</text>'}
  const best=data.reduce((a,d,i)=>d.pct>data[a].pct?i:a,0),last=data.length-1;
  let bars='';data.forEach((d,i)=>{const x=M.l+band*i+(band-bw)/2,y0=y(0),y1=Math.min(y(d.pct),y0-1),r=Math.min(4,y0-y1);
   bars+='<path d="M'+x+','+y0+'V'+(y1+r)+'Q'+x+','+y1+' '+(x+r)+','+y1+'H'+(x+bw-r)+'Q'+(x+bw)+','+y1+' '+(x+bw)+','+(y1+r)+'V'+y0+'Z" fill="var(--cMe)"/>';
-  if(i===best||i===last)bars+='<text class="val" x="'+(x+bw/2)+'" y="'+(y1-6)+'" text-anchor="middle">'+Math.round(d.pct)+'%</text>';
+  if(i===best||i===last)bars+='<text class="val" x="'+(x+bw/2)+'" y="'+(y1-6)+'" text-anchor="middle">'+Math.round(d.pct)+'</text>';
   bars+='<rect class="hit" data-i="'+i+'" x="'+(M.l+band*i)+'" y="'+M.t+'" width="'+band+'" height="'+ih+'"/><rect class="hl" data-i="'+i+'" x="'+(M.l+band*i)+'" y="'+M.t+'" width="'+band+'" height="'+ih+'" opacity="0" style="fill-opacity:.06"/>'});
  svg.setAttribute('viewBox','0 0 '+W+' '+H);
  svg.innerHTML=g+'<line class="ref" x1="'+M.l+'" x2="'+(W-M.r)+'" y1="'+y(100)+'" y2="'+y(100)+'"/><text x="'+(W-M.r+6)+'" y="'+(y(100)+4)+'">Holmes</text>'+bars+'<line class="base" x1="'+M.l+'" x2="'+(W-M.r)+'" y1="'+y(0)+'" y2="'+y(0)+'"/>'+xLabels(data,band,M,H);
@@ -1050,13 +1310,19 @@ function drawLeadChart(data){
 let statsT;window.addEventListener('resize',()=>{clearTimeout(statsT);statsT=setTimeout(()=>{if(store&&!$('#campView').classList.contains('hidden'))renderStats()},200)});
 
 /* ---------- campaign ---------- */
+function renderCampProg(){
+ const byNo={};store.order.forEach(id=>{const c=store.cases[id],k=parseInt(String(c.f.no||'').trim(),10);if(k>=1&&k<=10){const S=scoreOf(c);if(!byNo[k]||(S.has&&!byNo[k].S.has))byNo[k]={id,S,c}}});
+ let h='',tot=0,hol=0,done=0;
+ for(let k=1;k<=10;k++){const e=byNo[k];const cls=['cp'];if(k===10)cls.push('ten');if(e)cls.push('go');if(e&&e.S.has){cls.push('sc');tot+=e.S.F;hol+=e.S.hs;done++}
+  h+='<div class="'+cls.join(' ')+'"'+(e?' data-open="'+e.id+'" title="'+esc(e.c.f.title||'Case '+k)+'"':' title="Not started"')+'><small>Case '+k+'</small><b>'+(e&&e.S.has?fmt(e.S.F):e?'…':'—')+'</b>'+(e&&e.S.has?'<span class="rank">'+rank(e.S.pct)+'</span>':'<span class="hint">'+(e?'in progress':k<=4?'standalone':k<10?'leads to 10':'play last')+'</span>')+'</div>'}
+ $('#camprog').innerHTML=h;
+ $('#campSum').innerHTML=done?'Campaign: <b>'+fmt(tot)+'</b> points from '+done+' of 10 cases · Holmes <b>'+fmt(hol)+'</b> · '+(tot>=hol?'<b style="color:var(--good)">you lead the Master by '+fmt(tot-hol)+'</b>':'Holmes leads by <b>'+fmt(hol-tot)+'</b>')+' · average <b>'+fmt(tot/done)+'</b>':'<span class="hint">No numbered cases scored yet.</span>';
+}
 function renderCamp(){
- renderStats();
+ renderStats();renderCampProg();
  let tot={F:0,hs:0,n:0,h:0},rows='';
  store.order.forEach(id=>{const c=store.cases[id],f=c.f;
-  const n=c.t.leads.filter(r=>['type','who','addr','why','learned'].some(k=>String(r[k]||'').trim())).length,h=hCount(c);
-  const A=c.t.score.reduce((s,r)=>s+num(r.earned),0),F=A-(h?Math.max(0,n-h):0)*num(f.penalty),hs=num(f.holmesScore);
-  const has=c.t.score.some(r=>String(r.earned||'').trim());
+  const S=scoreOf(c),n=S.n,h=S.h,F=S.F,hs=S.hs,has=S.has;
   if(has){tot.F+=F;tot.hs+=hs}tot.n+=n;tot.h+=h;
   rows+='<tr data-open="'+id+'"'+(id===store.current?' style="font-weight:bold"':'')+'><td>'+esc(f.no)+'</td><td>'+esc(f.title||'Untitled case')+'</td><td>'+esc(f.box)+'</td><td>'+esc(f.played)+'</td><td>'+(has?fmt(F):'—')+'</td><td>'+(has?fmt(hs):'—')+'</td><td>'+(has&&hs?Math.round(F/hs*100)+'%':'—')+'</td><td>'+n+' / '+(h||'—')+'</td><td class="rank">'+(has&&hs?rank(F/hs*100):'')+'</td></tr>'});
  $('#camp').innerHTML='<thead><tr><th>No.</th><th>Case</th><th>Box</th><th>Played</th><th>My score</th><th>Holmes</th><th>%</th><th>Leads (me / H)</th><th>Rank</th></tr></thead><tbody>'+rows+'</tbody>'+
@@ -1073,6 +1339,8 @@ function onInput(e){
  else if(el.dataset.g){store.notes[el.dataset.g]=el.value;store.notesUpdated=Date.now();save();return}
  else if(el.dataset.c){c.contacts[el.dataset.c]=el.checked}
  else if(el.dataset.v){c.verify[+el.dataset.v]=el.checked}
+ else if(el.dataset.lsrc){const L=el.dataset.lsrc;if(c.letters[L]){c.letters[L].src=el.value;save(true)}return}
+ else if(el.id==='bonusChk'){c.f.leadBonus=el.checked?'1':'0'}
  else return;
  if(el.dataset.t)dirFill(el);
  if(el.dataset.t==='clues')scheduleTheories();
@@ -1089,6 +1357,18 @@ document.addEventListener('click',e=>{
  if(t.dataset.del){const name=t.dataset.del;c.t[name].splice(+t.dataset.i,1);name==='clues'?(renderPin(),renderTheories()):name==='theories'?renderTheories():renderTable(name);save(true);derived();return}
  if(t.dataset.add){const name=t.dataset.add;if(name==='theories'&&c.t.theories.length>=4){banner('Four theories is the limit. Remove one to add another.');return}c.t[name].push(newRow(name,c.t[name].length));name==='clues'?renderPin():name==='theories'?renderTheories():renderTable(name);save(true);derived();
   const host=name==='clues'?$('#pin'):name==='theories'?$('#theories'):$('#t-'+name);const last=host&&host.querySelectorAll(name==='clues'?'.card':name==='theories'?'.theory':'tbody tr');if(last&&last.length){const f=last[last.length-1].querySelector('input[type=text],textarea,input:not([type])');if(f)f.focus()}return}
+ const lt=t.closest('[data-letter]');
+ if(lt){const L=lt.dataset.letter;if(c.letters[L])delete c.letters[L];else c.letters[L]={src:'',at:Date.now()};save(true);derived();
+  const ready=c.letters[L]&&c.t.locked.some(r=>!r.done&&needOf(r)===L);if(ready)banner('Letter '+L+' circled. A lead you couldn\'t read before is now free to re-read (see the table under the letters).');return}
+ if(t.dataset.rr!=null){const i=+t.dataset.rr,r=c.t.locked[i];if(!r)return;const L=needOf(r);
+  const row={type:'V',addr:String(r.addr||'').trim(),cost:'Re-read',why:'Re-read with circled letter '+L,learned:''};
+  const k=c.t.leads.findIndex(x=>!leadFilled(x));if(k>=0)c.t.leads[k]=Object.assign(c.t.leads[k],row);else c.t.leads.push(row);
+  r.done=true;renderTable('leads');renderTable('locked');save(true);derived();banner('Added a free re-read of '+(row.addr||'that lead')+' to the lead log. Note what you learn there.');return}
+ if(t.dataset.rrundo!=null){const r=c.t.locked[+t.dataset.rrundo];if(r){r.done=false;save(true);derived()}return}
+ const gl=t.closest('[data-guide]');
+ if(gl){showView('guideView');const el=document.getElementById(gl.dataset.guide);if(el)setTimeout(()=>el.scrollIntoView({block:'start'}),30);return}
+ const ga=t.closest('.gtoc a');
+ if(ga){e.preventDefault();const el=document.getElementById(ga.getAttribute('href').slice(1));if(el)el.scrollIntoView({behavior:'smooth',block:'start'});return}
  if(t.dataset.cc){const v=+t.dataset.cc;c.f.holmesLeads=String(+c.f.holmesLeads===v?'':v);$$('[data-f="holmesLeads"]').forEach(el=>el.value=c.f.holmesLeads);save(true);derived();return}
  const tr=t.closest('[data-open]');
  if(tr){store.current=tr.dataset.open;save();showView('caseView');renderAll();window.scrollTo(0,0);return}
@@ -1098,6 +1378,9 @@ document.addEventListener('click',e=>{
  const g=t.closest('[data-goto]');
  if(g){const tb=g.dataset.gotot||'leads';mapLocate(tb==='holmes'?'holmes':'mine',+g.dataset.goto,true);return}
 });
+function calcRun(){const q=num($('#cq').value),n=num($('#cn').value),h=num($('#ch').value),d=n-h,F=q-5*d;$('#cout').textContent=fmt(F);$('#crank').textContent=rank(F)}
+calcRun();
+['#cq','#cn','#ch'].forEach(id=>$(id).addEventListener('input',calcRun));
 function showView(v){
  $$('.view').forEach(el=>el.classList.toggle('hidden',el.id!==v));
  $$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.view===v));
@@ -1176,9 +1459,8 @@ function updateRail(){
  if(!store)return;const c=cur(),f=c.f,n=leadCount(),h=hCount(c);
  const done=VERIFY.filter((_,i)=>c.verify[i]).length;
  const sus=c.t.suspects.filter(r=>String(r.name||'').trim()).length,clues=c.t.clues.filter(r=>String(r.clue||'').trim()).length;
- const has=c.t.score.some(r=>String(r.earned||'').trim());
- const F=c.t.score.reduce((s2,r)=>s2+num(r.earned),0)-(h?Math.max(0,n-h):0)*num(f.penalty),hs=num(f.holmesScore);
- $('#railStatus').innerHTML='<div><span>Leads</span><b>'+n+(h?' / '+h:'')+'</b></div><div><span>Warnings</span><b>'+issueCount+'</b></div><div><span>Persons</span><b>'+sus+'</b></div><div><span>Clues pinned</span><b>'+clues+'</b></div><div><span>Checks</span><b>'+done+' / '+VERIFY.length+'</b></div><div><span>Theory</span><b>'+(c.sealed?'Sealed':'Open')+'</b></div>'+(has?'<div><span>Score</span><b>'+fmt(F)+'</b></div>'+(hs?'<div class="rk">'+rank(F/hs*100)+'</div>':''):'');
+ const S=scoreOf(c),has=S.has,F=S.F,hs=S.hs,nl=LETTERS.filter(L=>c.letters[L]).length;
+ $('#railStatus').innerHTML='<div><span>Leads</span><b>'+n+(h?' / '+h:'')+'</b></div><div><span>Letters</span><b>'+nl+'</b></div><div><span>Warnings</span><b>'+issueCount+'</b></div><div><span>Persons</span><b>'+sus+'</b></div><div><span>Clues pinned</span><b>'+clues+'</b></div><div><span>Checks</span><b>'+done+' / '+VERIFY.length+'</b></div><div><span>Theory</span><b>'+(c.sealed?'Sealed':'Open')+'</b></div>'+(has?'<div><span>Score</span><b>'+fmt(F)+'</b></div>'+(hs?'<div class="rk">'+rank(F/hs*100)+'</div>':''):'');
 }
 
 /* ---------- night mode, split view, directory import ---------- */
@@ -1479,6 +1761,10 @@ function findIssues(c){
  c.t.theories.forEach(t=>{const p=sus[low(t.who)];if(p&&p.status==='Cleared')out.push({bad:true,msg:'Theory <b>'+esc(L(t.title)||'untitled')+'</b> blames '+esc(L(t.who))+', who is cleared.'})});
  if(L(c.f.who)){const p=sus[low(c.f.who)];if(p&&p.status==='Cleared')out.push({bad:true,msg:'Your sealed theory names '+esc(L(c.f.who))+', who is cleared.'})}
  c.t.clues.forEach(k=>{const p=sus[low(k.to)];if(p&&p.status==='Cleared'&&(+k.str||0)>=3)out.push({msg:'A strong clue points to <b>'+esc(L(k.to))+'</b>, who is cleared: "'+esc(L(k.clue).slice(0,60))+'".'})});
+ c.t.locked.forEach(r=>{const Lt=needOf(r);if(Lt&&!r.done&&c.letters[Lt])out.push({msg:'You have circled <b>'+Lt+'</b>: re-read <b>'+esc(L(r.addr)||'the locked lead')+'</b> now. It doesn\'t cost a lead.'})});
+ c.t.leads.forEach((r,i)=>{const a=areaOf(r.addr);if(a&&CLOSED_AREAS.includes(a))out.push({msg:'Lead '+(i+1)+' is at <b>'+esc(L(r.addr))+'</b>. Addresses in E, S and QP can\'t be visited unless a lead says so.'})});
+ {const seenA={};c.t.leads.forEach((r,i)=>{if(!leadFilled(r)||r.cost||r.type==='N'||r.type==='D')return;const a=normAddr(r.addr);if(!a||!/\d/.test(a))return;if(seenA[a])out.push({msg:'<b>'+esc(a)+'</b> is logged twice (leads '+seenA[a]+' and '+(i+1)+'). Re-reading a lead you already followed is free: set the second one\'s Cost to Re-read or remove it.'});else seenA[a]=i+1})}
+ if(parseInt(c.f.no,10)===10&&store&&store.order){const played=new Set(store.order.map(id=>store.cases[id]).filter(x=>x&&x!==c&&scoreOf(x).has).map(x=>parseInt(x.f.no,10)));const miss=[5,6,7,8,9].filter(k=>!played.has(k));if(miss.length)out.push({msg:'Case 10 should be played after cases 5–9. Not yet scored: '+miss.join(', ')+'.'})}
  paperStates(c).forEach((st,i)=>{if(st.k==='bad')out.push({bad:true,msg:'Newspaper "'+esc(L(c.t.papers[i].item)||L(c.t.papers[i].date))+'" is dated after the case date, so it can\'t be used.'})});
  return out;
 }
